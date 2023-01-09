@@ -764,11 +764,11 @@ MonoBehaviour:
   joystick: {fileID: 1286561549}
   sensivity: 250
   CamSens: 30
-  groupSens: 10
+  groupSens: 15
   stopDist: 0.25
   playerCount: 1
   camOffs: {x: 0, y: 8, z: -10}
-  DistanceFactor: 0.284
+  Dist: 0.26
   Radius: 1
 --- !u!4 &958941396
 Transform:
