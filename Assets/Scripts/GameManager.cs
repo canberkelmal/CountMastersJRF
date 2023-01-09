@@ -11,12 +11,12 @@ using Unity.VisualScripting;
 public class GameManager : MonoBehaviour
 {
     #region variables
-    GameObject Chars;
+    GameObject Chars, EndPoint;
     public Joystick joystick;
     Rigidbody rb;
     public float sensivity, CamSens, groupSens, stopDist;
     public int playerCount = 1;
-    GameObject cam, tg;
+    GameObject cam;
     public Vector3 camOffs;
     float x, z;
     Vector3 TargetPos;
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     {
         Chars = GameObject.Find("Chars");
         cam = GameObject.Find("Main Camera");
-        //tg = GameObject.Find("Toggle");
+        EndPoint = GameObject.Find("End Point");
         //tgRb = tg.GetComponent<Rigidbody>();
         rb = Chars.GetComponent<Rigidbody>();
         rads = new float[] {UnityEngine.Random.Range(0, 1)};
@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
-
         InputsController();
     }
 
@@ -60,9 +59,10 @@ public class GameManager : MonoBehaviour
         }
 
         //Controlling the chars&players
-        rb.velocity = new Vector3(joystick.Horizontal * sensivity * Time.deltaTime,
+        rb.velocity = new Vector3(joystick.Horizontal * sensivity * Time.deltaTime,  0, 0);
+        /*rb.velocity = new Vector3(joystick.Horizontal * sensivity * Time.deltaTime,
                                 0,
-                                joystick.Vertical * sensivity * Time.deltaTime);
+                                joystick.Vertical * sensivity * Time.deltaTime);*/
 
     }
 
@@ -76,11 +76,11 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < opNumber; i++)
             {
                 Instantiate(Chars.transform.GetChild(0).gameObject,
-                            Chars.transform.position,
+                            Chars.transform.GetChild(0).position,
                             Quaternion.identity,
                             Chars.transform);
             }
-            camOffs += new Vector3(0, t, -t);
+            //camOffs += new Vector3(0, t, -t);
         }
 
         //Removes players
@@ -91,8 +91,10 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(Chars.transform.GetChild(t - i).gameObject);
             }
-            camOffs += new Vector3(0, t, -t);
+            //camOffs += new Vector3(0, t, -t);
         }
+
+        SetPlayersPos();
 
 
         //Updates the playerCount according to the operation that done
@@ -115,19 +117,16 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                float rnd = UnityEngine.Random.Range(0, Chars.transform.childCount);
-                x = Dist * Mathf.Sqrt(i) * Mathf.Cos(i * Radius);
-                z = Dist * Mathf.Sqrt(i) * Mathf.Sin(i * Radius);
-                TargetPos = new Vector3(x, Chars.transform.GetChild(i).localPosition.y, z);
-
-                if (i != 0)
-                    Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, TargetPos, groupSens * Time.deltaTime);
+                Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = EndPoint.transform.position;
             }
         }
     }
 
     void CameraController()
     {
-        cam.transform.position = Vector3.Lerp(cam.transform.position, Chars.transform.GetChild(0).position + camOffs, CamSens * Time.deltaTime);
+        cam.transform.position = Vector3.Lerp(cam.transform.position,
+                                              new Vector3(EndPoint.transform.position.x, 0, Chars.transform.GetChild(0).position.z) + camOffs,
+                                              CamSens * Time.deltaTime);
+        EndPoint.transform.position = Chars.transform.GetChild(0).position + new Vector3(0, 0, 1);
     }
 }
