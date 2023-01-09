@@ -82,7 +82,7 @@ public class GateSc : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             this.gameObject.GetComponent<BoxCollider>().enabled = false;
-            GateDetector(other.transform.parent.gameObject);
+            GateDetector(other.gameObject);
         }        
     }
 
@@ -99,10 +99,22 @@ public class GateSc : MonoBehaviour
             {
                 case LeftGateOp.Plus:
                     print("Plus triggered.");
+                    gm.AddRemove(true, LeftGateValue);
                     break;
 
                 case LeftGateOp.Minus:
                     print("Minus triggered.");
+                    gm.AddRemove(false, LeftGateValue);
+                    break;
+
+                case LeftGateOp.Multiply:
+                    print("Multiply triggered.");
+                    gm.AddRemove(true, gm.playerCount * LeftGateValue);
+                    break;
+
+                case LeftGateOp.Devide:
+                    print("Devide triggered.");
+                    gm.AddRemove(false, gm.playerCount / LeftGateValue);
                     break;
 
             }
@@ -115,17 +127,29 @@ public class GateSc : MonoBehaviour
             {
                 case RightGateOp.Plus:
                     print("Plus triggered.");
+                    gm.AddRemove(true, RightGateValue);
                     break;
 
                 case RightGateOp.Minus:
                     print("Minus triggered.");
+                    gm.AddRemove(false, RightGateValue);
+                    break;
+
+                case RightGateOp.Multiply:
+                    print("Multiply triggered.");
+                    gm.AddRemove(true, gm.playerCount * (RightGateValue-1));
+                    break;
+
+                case RightGateOp.Devide:
+                    print("Devide triggered.");
+                    gm.AddRemove(false, gm.playerCount / RightGateValue);
                     break;
 
             }
         }
     }
 
-
+    
     #endregion
 
 }
