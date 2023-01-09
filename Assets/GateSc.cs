@@ -1,18 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class GateSc : MonoBehaviour
 {
-    public string LeftGateOp = "Plus";
+    #region variables
+    enum LeftGateOp {Plus, Minus, Multiply, Devide}
+    [SerializeField]
+    [Header("Left Door Settings")]
+    LeftGateOp leftGateOp;
     public int LeftGateValue = 0;
 
-    public string RightGateOp = "Minus";
+    enum RightGateOp {Plus, Minus, Multiply, Devide}
+    [SerializeField]
+    [Header("Right Door Settings")]
+    RightGateOp rightGateOp;
     public int RightGateValue = 0;
+
+    GameManager gm;
+    #endregion
+
+    #region Unity
     // Start is called before the first frame update
     void Start()
     {
-        
+        gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -24,39 +38,46 @@ public class GateSc : MonoBehaviour
     {
 
     }
-
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        //Passes from left
-        if(other.transform.position.x<=0)
+        //Passes from left side of the gate
+        if (other.transform.position.x <= 0)
         {
-            switch (LeftGateOp)
+            switch (leftGateOp)
             {
-                case "Plus":
+                case LeftGateOp.Plus:
                     LeftGateValue = 0;
                     break;
 
-                case "Minus":
+                case LeftGateOp.Minus:
                     LeftGateValue = 0;
                     break;
 
             }
         }
 
-        //Passes from left
-        if (other.transform.position.x <= 0)
+        //Passes from right side of the gate
+        if (other.transform.position.x > 0)
         {
-            switch (LeftGateOp)
+            switch (rightGateOp)
             {
-                case "Plus":
-                    LeftGateValue = 0;
+                case RightGateOp.Plus:
+                    RightGateValue = 0;
                     break;
 
-                case "Minus":
-                    LeftGateValue = 0;
+                case RightGateOp.Minus:
+                    RightGateValue = 0;
                     break;
 
             }
         }
     }
+    #endregion
+
+    #region Functions
+
+
+
+    #endregion
+
 }
