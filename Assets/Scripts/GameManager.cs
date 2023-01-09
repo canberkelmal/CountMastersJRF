@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         ClickDedector();
+        SetPlayersPos();
     }
 
     void ClickDedector()
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour
     {
         CameraController();
         InputsController();
-        PlayersController();
+        //PlayersController();
     }
 
     //Controls all inputs
@@ -68,22 +69,24 @@ public class GameManager : MonoBehaviour
                                 joystick.Vertical * sensivity * Time.deltaTime);
 
     }
+
+    //If op is true, adds opNumber times player. Else, removes opNumber times player.
     public void AddRemove(bool op, int opNumber)
     {
+        //Adds players
         if(op)
         {
             float t = Chars.transform.childCount * 0.15f;
             for(int i = 0; i<opNumber; i++)
             {
                 Instantiate(Chars.transform.GetChild(0).gameObject,
-                            Chars.transform.position + new Vector3(UnityEngine.Random.Range(-t, t),0, UnityEngine.Random.Range(-t, t)),
+                            Chars.transform.position,
                             Quaternion.identity,
                             Chars.transform);
-
-                
             }
             camOffs += new Vector3(0, t, -t);
         }
+        //removes players
         else
         {
             int t = Chars.transform.childCount - 1;
@@ -95,36 +98,20 @@ public class GameManager : MonoBehaviour
         }
         playerCount = Chars.transform.childCount;
     }
-    void PlayersController()
+
+    void SetPlayersPos()
     {
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
-            PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
-            PlayerNavMesh.avoidancePriority = i>=99 ? 99 : i;
-
-            /*if (i > 0 && i <= 20)
-                PlayerNavMesh.stoppingDistance = stopDist * 1;
-            if (i > 20 && i <= 50)
-                PlayerNavMesh.stoppingDistance = stopDist * 2;
-            if (i > 50 && i <= 90)
-                PlayerNavMesh.stoppingDistance = stopDist * 3;
-            //if (i > 60 && i <= 80)
-            //    PlayerNavMesh.stoppingDistance = stopDist * 4;
-            if (i > 90)
-                PlayerNavMesh.stoppingDistance = stopDist * 4;*/
             var x = DistanceFactor * Mathf.Sqrt(i) * Mathf.Cos(i * Radius);
             var z = DistanceFactor * Mathf.Sqrt(i) * Mathf.Sin(i * Radius);
             var NewPos = new Vector3(x, Chars.transform.GetChild(i).position.y, z);
 
             if (i != 0)
                 Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, NewPos, groupSens * Time.deltaTime);
-
-
-
-            //PlayerNavMesh.stoppingDistance = i<=50 ? stopDist * PlayerNavMesh.avoidancePriority : stopDist * 50;
-            //PlayerNavMesh.destination = i==0 ? Chars.transform.position : Chars.transform.GetChild(0).position;
         }
     }
+
     void CameraController()
     {
         cam.transform.position = Vector3.Lerp(cam.transform.position, Chars.transform.GetChild(0).position + camOffs, CamSens * Time.deltaTime);

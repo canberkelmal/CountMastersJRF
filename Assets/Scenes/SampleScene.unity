@@ -764,11 +764,11 @@ MonoBehaviour:
   joystick: {fileID: 1286561549}
   sensivity: 250
   CamSens: 30
-  groupSens: 5
+  groupSens: 10
   stopDist: 0.25
   playerCount: 1
   camOffs: {x: 0, y: 8, z: -10}
-  DistanceFactor: 0.2
+  DistanceFactor: 0.284
   Radius: 1
 --- !u!4 &958941396
 Transform:
@@ -870,7 +870,7 @@ PrefabInstance:
     - target: {fileID: 6888542233580673956, guid: 1bbe69f085b701e47a8e745776ad1f4a,
         type: 3}
       propertyPath: RightGateValue
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bbe69f085b701e47a8e745776ad1f4a, type: 3}
