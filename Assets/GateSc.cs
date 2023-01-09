@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -40,42 +41,53 @@ public class GateSc : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.tag == "Player")
+        {
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
+            GateDetector(other.transform.parent.gameObject);
+        }
+
+        
+    }
+
+
+    #endregion
+
+    #region Functions
+    void GateDetector(GameObject player)
+    {
         //Passes from left side of the gate
-        if (other.transform.position.x <= 0)
+        if (player.transform.position.x <= 0)
         {
             switch (leftGateOp)
             {
                 case LeftGateOp.Plus:
-                    LeftGateValue = 0;
+                    print("Plus triggered.");
                     break;
 
                 case LeftGateOp.Minus:
-                    LeftGateValue = 0;
+                    print("Minus triggered.");
                     break;
 
             }
         }
 
         //Passes from right side of the gate
-        if (other.transform.position.x > 0)
+        if (player.transform.position.x > 0)
         {
             switch (rightGateOp)
             {
                 case RightGateOp.Plus:
-                    RightGateValue = 0;
+                    print("Plus triggered.");
                     break;
 
                 case RightGateOp.Minus:
-                    RightGateValue = 0;
+                    print("Minus triggered.");
                     break;
 
             }
         }
     }
-    #endregion
-
-    #region Functions
-
 
 
     #endregion
