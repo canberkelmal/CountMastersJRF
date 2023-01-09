@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,12 +15,13 @@ public class GameManager : MonoBehaviour
     public Joystick joystick;
     float ForwardValue;
     Rigidbody rb, tgRb;
-    public float sensivity, CamSens, stopDist;
+    public float sensivity, CamSens, groupSens, stopDist;
     public int playerCount = 1;
     NavMeshAgent PlayerNavMesh;
     GameObject cam, tg;
     public Vector3 camOffs;
 
+    [Range(0f,1f)] [SerializeField] private float DistanceFactor, Radius;
 
     #endregion
 
@@ -28,8 +30,8 @@ public class GameManager : MonoBehaviour
     {
         Chars = GameObject.Find("Chars");
         cam = GameObject.Find("Main Camera");
-        tg = GameObject.Find("Toggle");
-        tgRb = tg.GetComponent<Rigidbody>();
+        //tg = GameObject.Find("Toggle");
+        //tgRb = tg.GetComponent<Rigidbody>();
         rb = Chars.GetComponent<Rigidbody>();
     }
 
@@ -70,13 +72,17 @@ public class GameManager : MonoBehaviour
     {
         if(op)
         {
+            float t = Chars.transform.childCount * 0.15f;
             for(int i = 0; i<opNumber; i++)
             {
                 Instantiate(Chars.transform.GetChild(0).gameObject,
-                            Chars.transform.position + new Vector3(UnityEngine.Random.Range(-0.1f, 0.1f),0, UnityEngine.Random.Range(-0.1f, 0.1f)),
+                            Chars.transform.position + new Vector3(UnityEngine.Random.Range(-t, t),0, UnityEngine.Random.Range(-t, t)),
                             Quaternion.identity,
                             Chars.transform);
+
+                
             }
+            camOffs += new Vector3(0, t, -t);
         }
         else
         {
@@ -85,6 +91,7 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(Chars.transform.GetChild(t-i).gameObject);
             }
+            camOffs += new Vector3(0, t, -t);
         }
         playerCount = Chars.transform.childCount;
     }
@@ -93,11 +100,29 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
             PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
-            PlayerNavMesh.avoidancePriority = i;
-            PlayerNavMesh.stoppingDistance = stopDist * Chars.transform.childCount;
-            //PlayerNavMesh.stoppingDistance = 0.1f + 0.05f * i;
-            PlayerNavMesh.destination = Chars.transform.position;
-            //Chars.transform.GetChild(i).position = Vector3.Lerp(Chars.transform.GetChild(i).position, tg.transform.position, sensivity* 0.7f * Time.deltaTime);
+            PlayerNavMesh.avoidancePriority = i>=99 ? 99 : i;
+
+            /*if (i > 0 && i <= 20)
+                PlayerNavMesh.stoppingDistance = stopDist * 1;
+            if (i > 20 && i <= 50)
+                PlayerNavMesh.stoppingDistance = stopDist * 2;
+            if (i > 50 && i <= 90)
+                PlayerNavMesh.stoppingDistance = stopDist * 3;
+            //if (i > 60 && i <= 80)
+            //    PlayerNavMesh.stoppingDistance = stopDist * 4;
+            if (i > 90)
+                PlayerNavMesh.stoppingDistance = stopDist * 4;*/
+            var x = DistanceFactor * Mathf.Sqrt(i) * Mathf.Cos(i * Radius);
+            var z = DistanceFactor * Mathf.Sqrt(i) * Mathf.Sin(i * Radius);
+            var NewPos = new Vector3(x, Chars.transform.GetChild(i).position.y, z);
+
+            if (i != 0)
+                Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, NewPos, groupSens * Time.deltaTime);
+
+
+
+            //PlayerNavMesh.stoppingDistance = i<=50 ? stopDist * PlayerNavMesh.avoidancePriority : stopDist * 50;
+            //PlayerNavMesh.destination = i==0 ? Chars.transform.position : Chars.transform.GetChild(0).position;
         }
     }
     void CameraController()
