@@ -99,10 +99,7 @@ public class GameManager : MonoBehaviour
         playerCount = Chars.transform.childCount;
         rads = new float[playerCount];
         for (int i = 0; i < rads.Length; i++)
-        {
-            rads[i] = UnityEngine.Random.Range(0, 100) * 0.01f;
-            Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().avoidancePriority = i;
-        }
+            rads[i] = UnityEngine.Random.Range(0, i) * 0.01f;
     }
 
     //Sets collected players pos during update
@@ -119,8 +116,8 @@ public class GameManager : MonoBehaviour
             else
             {
                 float rnd = UnityEngine.Random.Range(0, Chars.transform.childCount);
-                x = Dist * Mathf.Sqrt(i) * Mathf.Cos(i * rads[i]);
-                z = Dist * Mathf.Sqrt(i) * Mathf.Sin(i * rads[i]);
+                x = Dist * Mathf.Sqrt(i) * Mathf.Cos(i * Radius);
+                z = Dist * Mathf.Sqrt(i) * Mathf.Sin(i * Radius);
                 TargetPos = new Vector3(x, Chars.transform.GetChild(i).localPosition.y, z);
 
                 if (i != 0)
