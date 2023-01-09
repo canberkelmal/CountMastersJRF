@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
 public class GateSc : MonoBehaviour
@@ -21,6 +22,8 @@ public class GateSc : MonoBehaviour
     public int RightGateValue = 0;
 
     GameManager gm;
+    Text leftGateText;
+    Text rightGateText;
     #endregion
 
     #region Unity
@@ -28,6 +31,41 @@ public class GateSc : MonoBehaviour
     void Start()
     {
         gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        leftGateText = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        rightGateText = transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Text>();
+        
+        switch (leftGateOp)
+        {
+            case LeftGateOp.Plus:
+                leftGateText.text = "+" + LeftGateValue.ToString();
+                break;
+            case LeftGateOp.Minus:
+                leftGateText.text = "-" + LeftGateValue.ToString();
+                break;
+            case LeftGateOp.Devide:
+                leftGateText.text = "/" + LeftGateValue.ToString();
+                break;
+            case LeftGateOp.Multiply:
+                leftGateText.text = "x" + LeftGateValue.ToString();
+                break;
+        }
+
+        switch (rightGateOp)
+        {
+            case RightGateOp.Plus:
+                rightGateText.text = "+" + RightGateValue.ToString();
+                break;
+            case RightGateOp.Minus:
+                rightGateText.text = "-" + RightGateValue.ToString();
+                break;
+            case RightGateOp.Devide:
+                rightGateText.text = "/" + RightGateValue.ToString();
+                break;
+            case RightGateOp.Multiply:
+                rightGateText.text = "x" + RightGateValue.ToString();
+                break;
+        }
+    
     }
 
     // Update is called once per frame
@@ -45,9 +83,7 @@ public class GateSc : MonoBehaviour
         {
             this.gameObject.GetComponent<BoxCollider>().enabled = false;
             GateDetector(other.transform.parent.gameObject);
-        }
-
-        
+        }        
     }
 
 
