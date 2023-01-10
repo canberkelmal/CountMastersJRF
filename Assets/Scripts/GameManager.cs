@@ -14,15 +14,17 @@ public class GameManager : MonoBehaviour
     GameObject Chars, EndPoint;
     public Joystick joystick;
     Rigidbody rb;
-    public float sensivity, CamSens, groupSens, stopDist;
+    public float sensivity, CamSens, groupSens, groupSens2, stopDist;
     public int playerCount = 1;
     GameObject cam;
     public Vector3 camOffs;
     float x, z;
     Vector3 TargetPos;
+    NavMeshAgent PlayerNavMesh;
 
-    [Range(0f,1f)] [SerializeField] private float Dist, Radius;
+    [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
     float[] rads;
+    bool groupTrig = true;
 
     #endregion
 
@@ -41,7 +43,15 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         CameraController();
-        SetPlayersPos();
+        //SetPlayersPos();
+
+        for (int i = 0; i < Chars.transform.childCount; i++)
+        {
+            if(groupTrig)
+                Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, Vector3.zero, groupSens2 * Time.deltaTime);
+            //Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = Chars.transform.position + Vector3.forward;
+        }
+        Chars.GetComponent<NavMeshAgent>().destination = Chars.GetComponent<NavMeshAgent>().destination + Vector3.forward;
     }
 
     void FixedUpdate()
@@ -59,7 +69,9 @@ public class GameManager : MonoBehaviour
         }
 
         //Controlling the chars&players
-        rb.velocity = new Vector3(joystick.Horizontal * sensivity * Time.deltaTime,  0, 0);
+        //Chars.GetComponent<NavMeshAgent>().destination = Chars.transform.position + Vector3.forward;
+        //rb.velocity = new Vector3(joystick.Horizontal * sensivity * Time.deltaTime,  0, 0);
+        Chars.transform.position += new Vector3(joystick.Horizontal * sensivity * Time.deltaTime, 0, 0);
         /*rb.velocity = new Vector3(joystick.Horizontal * sensivity * Time.deltaTime,
                                 0,
                                 joystick.Vertical * sensivity * Time.deltaTime);*/
@@ -109,7 +121,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
-            if (Chars.transform.GetChild(i).position.x < -4.5f || Chars.transform.GetChild(i).position.x > 4.5f)
+            /*if (Chars.transform.GetChild(i).position.x < -4.5f || Chars.transform.GetChild(i).position.x > 4.5f)
             {
                 Chars.transform.GetChild(i).GetComponent<CapsuleCollider>().isTrigger = true;
                 Chars.transform.GetChild(i).AddComponent<Rigidbody>();
@@ -117,16 +129,52 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = EndPoint.transform.position;
-            }
+                //Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = EndPoint.transform.position + Vector3.forward;
+                //Chars.transform.GetChild(0).GetComponent<NavMeshAgent>().destination = Chars.transform.GetChild(0).position + Vector3.forward;
+
+                Vector3 dir = Chars.transform.GetChild(0).position + Chars.transform.GetChild(0).forward;
+                Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = i != 0 ? dir : Chars.transform.GetChild(0).position + Vector3.forward;
+            }*/
+
+            //PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
+            //PlayerNavMesh.avoidancePriority = i >= 99 ? 99 : i;
+
+            //PlayerNavMesh.avoidancePriority = i % 2 == 0 ? i : i + 1;
+
+            /*
+            x = DistanceFactor * Mathf.Sqrt(i) * Mathf.Cos(i * Radius);
+            z = DistanceFactor * Mathf.Sqrt(i) * Mathf.Sin(i * Radius);
+            TargetPos = Chars.transform.GetChild(0).localPosition + new Vector3(x, Chars.transform.GetChild(i).localPosition.y, z);
+
+            Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, TargetPos, groupSens * Time.deltaTime);
+            */
+
+            StartCoroutine ( SetGroupPos(Chars.transform.GetChild(i).gameObject, i) );
+
         }
     }
 
     void CameraController()
     {
+        //Chars.transform.position = Chars.transform.GetChild(0).transform.position;
         cam.transform.position = Vector3.Lerp(cam.transform.position,
-                                              new Vector3(EndPoint.transform.position.x, 0, Chars.transform.GetChild(0).position.z) + camOffs,
+                                              new Vector3(Chars.transform.GetChild(0).position.x, 0, Chars.transform.GetChild(0).position.z) + camOffs,
                                               CamSens * Time.deltaTime);
-        EndPoint.transform.position = Chars.transform.GetChild(0).position + new Vector3(0, 0, 1);
+        //EndPoint.transform.position = Chars.transform.GetChild(0).position;
+    }
+
+    IEnumerator SetGroupPos(GameObject Runner, int ind)
+    {
+        groupTrig = false;
+        for (int i = 0; i < 25; i++)
+        {
+            x = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Cos(ind * Radius);
+            z = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Sin(ind * Radius);
+            TargetPos = Chars.transform.position + new Vector3(x, Chars.transform.GetChild(ind).localPosition.y, z);
+
+            Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, TargetPos, groupSens * Time.deltaTime);
+            yield return new WaitForSeconds(0.01f);
+        }
+        groupTrig = true;
     }
 }
