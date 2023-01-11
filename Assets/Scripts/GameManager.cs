@@ -20,13 +20,16 @@ public class GameManager : MonoBehaviour
     public int setGroupDuration = 25;
     GameObject cam;
     public Vector3 camOffs;
-    float x, z;
+    float x, z, camX, camZ;
     Vector3 TargetPos, CamTargetPos;
     NavMeshAgent PlayerNavMesh;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
     float[] rads;
     bool groupTrig = true;
+
+    public Canvas PlayerCountCv;
+    public Text PlayerCountText;
 
     #endregion
 
@@ -104,13 +107,19 @@ public class GameManager : MonoBehaviour
         }
 
         SetPlayersPos();
-
-        //Updates the playerCount according to the operation that done
-        playerCount = Chars.transform.childCount;
+        SetPlayerCount();        
 
         /*rads = new float[playerCount];
         for (int i = 0; i < rads.Length; i++)
             rads[i] = UnityEngine.Random.Range(0, i) * 0.01f;*/
+    }
+
+
+    //Updates the playerCount
+    public void SetPlayerCount()
+    {
+        playerCount = Chars.transform.childCount;
+        PlayerCountText.text = playerCount.ToString();
     }
 
     //Sets collected players pos during update
@@ -119,7 +128,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
             StartCoroutine(SetGroupPos(Chars.transform.GetChild(i).gameObject, i));
-            PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
+            //PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
             //PlayerNavMesh.avoidancePriority = i % 2 == 0 ? i : i + 1;
             //PlayerNavMesh.avoidancePriority = i >= 99 ? 99 : i;
 
@@ -154,7 +163,18 @@ public class GameManager : MonoBehaviour
 
     void CameraController()
     {
-        CamTargetPos = new Vector3(Chars.transform.GetChild(0).position.x, 0, Chars.transform.GetChild(0).position.z) + camOffs;
+        for(int i=0; i < Chars.transform.childCount; i++)
+        {
+            //camX += Chars.transform.GetChild(i).position.x < 0 ? Chars.transform.GetChild(i).position.x * -1 : Chars.transform.GetChild(i).position.x;
+            camX += Chars.transform.GetChild(i).position.x;
+            camZ += Chars.transform.GetChild(i).position.z;
+        }
+
+        CamTargetPos = new Vector3(camX/Chars.transform.childCount, 0, camZ / Chars.transform.childCount) + camOffs;
+        PlayerCountCv.transform.position = CamTargetPos - camOffs + (Vector3.up * 1.52f);
+
+        camX = 0;
+        camZ = 0;
 
         cam.transform.position = Vector3.Lerp(cam.transform.position, CamTargetPos, CamSens * Time.deltaTime);
     }

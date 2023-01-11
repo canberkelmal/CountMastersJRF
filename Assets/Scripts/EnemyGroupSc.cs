@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyGroupSc : MonoBehaviour
 {
     public int numberOfEnemies;
     public float groupSens;
+    public Text EnemyCountTx;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < numberOfEnemies; i++)
+
+        EnemyCountTx.text = numberOfEnemies.ToString();
+        for (int i = 1; i < numberOfEnemies; i++)
         {
-            Instantiate(transform.GetChild(0).gameObject, transform.GetChild(0).position, transform.rotation, this.transform);
+            Instantiate(transform.GetChild(1).gameObject, transform.GetChild(1).position, transform.rotation, this.transform);
         }
         SetEnemyPos();
     }
@@ -22,7 +26,7 @@ public class EnemyGroupSc : MonoBehaviour
     //Set the target position for each enemy
     void SetEnemyPos()
     {
-        for (int i = 0; i < numberOfEnemies; i++)
+        for (int i = 1; i < numberOfEnemies; i++)
         {
             GameObject currentEnemy = transform.GetChild(i).gameObject;
             //Must be modified as written ourself
@@ -30,6 +34,17 @@ public class EnemyGroupSc : MonoBehaviour
             var z = DistanceFactor * Mathf.Sqrt(i) * Mathf.Sin(i * Radius);
             var TargetPos = new Vector3(x, currentEnemy.transform.localPosition.y, z);
             StartCoroutine(SendEnemyToPos(currentEnemy, TargetPos));
+        }
+    }
+
+    //Decrease number of enemies
+    public void SetCountText()
+    {
+        numberOfEnemies--;
+        EnemyCountTx.text = numberOfEnemies.ToString();
+        if(numberOfEnemies==0)
+        {
+            Destroy(gameObject);
         }
     }
 
