@@ -8,26 +8,19 @@ public class EnemyGroupSc : MonoBehaviour
     public float groupSens;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
+
     // Start is called before the first frame update
     void Start()
     {
         for (int i = 0; i < numberOfEnemies; i++)
         {
-            Instantiate(transform.GetChild(0).gameObject,
-                                transform.GetChild(0).position,
-                                transform.rotation,
-                                this.transform);
+            Instantiate(transform.GetChild(0).gameObject, transform.GetChild(0).position, transform.rotation, this.transform);
         }
-        Set();
+        SetEnemyPos();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void Set()
+    //Set the position for each enemy
+    void SetEnemyPos()
     {
         for (int i = 0; i < numberOfEnemies; i++)
         {
@@ -36,11 +29,12 @@ public class EnemyGroupSc : MonoBehaviour
             var x = DistanceFactor * Mathf.Sqrt(i) * Mathf.Cos(i * Radius);
             var z = DistanceFactor * Mathf.Sqrt(i) * Mathf.Sin(i * Radius);
             var TargetPos = new Vector3(x, currentEnemy.transform.localPosition.y, z);
-            StartCoroutine(SetGroupPos(currentEnemy, TargetPos));
+            StartCoroutine(SendEnemyToPos(currentEnemy, TargetPos));
         }
     }
 
-    IEnumerator SetGroupPos(GameObject ce, Vector3 tp)
+    //Send the enemy to the position
+    IEnumerator SendEnemyToPos(GameObject ce, Vector3 tp)
     {
         for (int i = 0; i < 10; i++)
         {

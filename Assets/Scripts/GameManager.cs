@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     GameObject cam;
     public Vector3 camOffs;
     float x, z;
-    Vector3 TargetPos;
+    Vector3 TargetPos, CamTargetPos;
     NavMeshAgent PlayerNavMesh;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
@@ -106,10 +106,10 @@ public class GameManager : MonoBehaviour
 
 
         //Updates the playerCount according to the operation that done
-        playerCount = Chars.transform.childCount;
+        /*playerCount = Chars.transform.childCount;
         rads = new float[playerCount];
         for (int i = 0; i < rads.Length; i++)
-            rads[i] = UnityEngine.Random.Range(0, i) * 0.01f;
+            rads[i] = UnityEngine.Random.Range(0, i) * 0.01f;*/
     }
 
     //Sets collected players pos during update
@@ -153,9 +153,9 @@ public class GameManager : MonoBehaviour
 
     void CameraController()
     {
-        cam.transform.position = Vector3.Lerp(cam.transform.position,
-                                              new Vector3(Chars.transform.GetChild(0).position.x, 0, Chars.transform.GetChild(0).position.z) + camOffs,
-                                              CamSens * Time.deltaTime);
+        CamTargetPos = new Vector3(Chars.transform.GetChild(0).position.x, 0, Chars.transform.GetChild(0).position.z) + camOffs;
+
+        cam.transform.position = Vector3.Lerp(cam.transform.position, CamTargetPos, CamSens * Time.deltaTime);
     }
 
     IEnumerator SetGroupPos(GameObject Runner, int ind)
