@@ -741,13 +741,13 @@ MonoBehaviour:
   joystick: {fileID: 1286561549}
   sensivity: 5
   CamSens: 1
-  groupSens: 15
-  groupSens2: 3
+  spawnSense: 7
+  groupWalkSens: 3
   stopDist: 0.25
   playerCount: 1
-  setGroupDuration: 40
+  setGroupDuration: 30
   camOffs: {x: 0, y: 7.14, z: -7}
-  DistanceFactor: 0.35
+  DistanceFactor: 1
   Radius: 1
 --- !u!4 &958941396
 Transform:
@@ -1034,6 +1034,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bbe69f085b701e47a8e745776ad1f4a, type: 3}
+--- !u!1 &1437090832 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6783992572244905974, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+    type: 3}
+  m_PrefabInstance: {fileID: 5683141111019961164}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1437090838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437090832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c6cb580dc014e4f8476c1542a4f76a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1586812618
 GameObject:
   m_ObjectHideFlags: 0
@@ -1209,6 +1227,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1586812619}
     m_Modifications:
+    - target: {fileID: 3781680142002427669, guid: 74c4a587b05df1e40925ddeb8c052db8,
+        type: 3}
+      propertyPath: avoidancePriority
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3781680142002427752, guid: 74c4a587b05df1e40925ddeb8c052db8,
         type: 3}
       propertyPath: m_Name

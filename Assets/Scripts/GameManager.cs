@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
     GameObject Chars, EndPoint;
     public Joystick joystick;
     Rigidbody rb;
-    public float sensivity, CamSens, groupSens, groupSens2, stopDist;
+    public float sensivity, CamSens, spawnSense, groupWalkSens, stopDist;
+
     public int playerCount = 1;
     public int setGroupDuration = 25;
     GameObject cam;
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < Chars.transform.childCount; i++)
             {
-                Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, Vector3.zero, groupSens2 * Time.deltaTime);
+                Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, Vector3.zero, groupWalkSens * Time.deltaTime);
                 //Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = Chars.transform.position + Vector3.forward;
             }
         }
@@ -104,10 +105,10 @@ public class GameManager : MonoBehaviour
 
         SetPlayersPos();
 
-
         //Updates the playerCount according to the operation that done
-        /*playerCount = Chars.transform.childCount;
-        rads = new float[playerCount];
+        playerCount = Chars.transform.childCount;
+
+        /*rads = new float[playerCount];
         for (int i = 0; i < rads.Length; i++)
             rads[i] = UnityEngine.Random.Range(0, i) * 0.01f;*/
     }
@@ -166,9 +167,9 @@ public class GameManager : MonoBehaviour
             //Must be modified as written ourself
             x = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Cos(ind * Radius);
             z = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Sin(ind * Radius);
-            TargetPos = Chars.transform.position + new Vector3(x, Chars.transform.GetChild(ind).localPosition.y, z);
+            TargetPos = new Vector3(x, Chars.transform.GetChild(ind).localPosition.y, z);
 
-            Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, TargetPos, groupSens * Time.deltaTime);
+            Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, TargetPos, spawnSense * Time.deltaTime);
             yield return new WaitForSeconds(0.01f);
         }
         groupTrig = true;
