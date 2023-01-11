@@ -19,7 +19,7 @@ public class EnemyGroupSc : MonoBehaviour
         SetEnemyPos();
     }
 
-    //Set the position for each enemy
+    //Set the target position for each enemy
     void SetEnemyPos()
     {
         for (int i = 0; i < numberOfEnemies; i++)

@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviour
             //Must be modified as written ourself
             x = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Cos(ind * Radius);
             z = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Sin(ind * Radius);
-            TargetPos = new Vector3(x, Chars.transform.GetChild(ind).localPosition.y, z);
+            TargetPos = Chars.transform.position + new Vector3(x, Chars.transform.GetChild(ind).localPosition.y, z);
 
             Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, TargetPos, groupSens * Time.deltaTime);
             yield return new WaitForSeconds(0.01f);
