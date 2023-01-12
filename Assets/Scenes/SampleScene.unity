@@ -916,16 +916,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystick: {fileID: 1286561549}
-  sensivity: 5
+  jsSensivity: 1
   CamSens: 5
-  spawnSense: 7
+  spawnSense: 4
   groupWalkSens: 3
   stopDist: 0.25
   playerCount: 1
-  setGroupDuration: 30
+  setGroupDuration: 25
   camOffs: {x: 0, y: 7.14, z: -7}
   DistanceFactor: 1
-  Radius: 1
+  Radius: 0.976
   PlayerCountCv: {fileID: 281774016}
   PlayerCountText: {fileID: 701160411}
 --- !u!4 &958941396
@@ -1410,21 +1410,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1586812619}
     m_Modifications:
-    - target: {fileID: 3781680142002427669, guid: 74c4a587b05df1e40925ddeb8c052db8,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.51
-      objectReference: {fileID: 0}
-    - target: {fileID: 3781680142002427669, guid: 74c4a587b05df1e40925ddeb8c052db8,
-        type: 3}
-      propertyPath: avoidancePriority
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3781680142002427670, guid: 74c4a587b05df1e40925ddeb8c052db8,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.55
-      objectReference: {fileID: 0}
     - target: {fileID: 3781680142002427752, guid: 74c4a587b05df1e40925ddeb8c052db8,
         type: 3}
       propertyPath: m_Name
@@ -1563,6 +1548,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2045297198764860930, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 2045297198764860930, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 2045297198764860930, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.31
+      objectReference: {fileID: 0}
     - target: {fileID: 2045297198764860930, guid: 55a2cc42f8ff7214ea471af9a05a588a,
         type: 3}
       propertyPath: m_AnchoredPosition.x

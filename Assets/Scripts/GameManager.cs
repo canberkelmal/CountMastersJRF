@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     GameObject Chars, EndPoint;
     public Joystick joystick;
     Rigidbody rb;
-    public float sensivity, CamSens, spawnSense, groupWalkSens, stopDist;
+    public float jsSensivity, CamSens, spawnSense, groupWalkSens, stopDist;
 
     public int playerCount = 1;
     public int setGroupDuration = 25;
@@ -65,6 +65,11 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < Chars.transform.childCount; i++)
             {
                 Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, Vector3.zero, groupWalkSens * Time.deltaTime);
+
+                /*Chars.transform.GetChild(i).position = Vector3.MoveTowards(Chars.transform.GetChild(i).position,
+                                                                           PlayerCountCv.transform.position - (Vector3.up * PlayerCountCv.transform.position.y) + (Vector3.up*0.1f),
+                                                                           groupWalkSens * Time.deltaTime);*/
+
                 //Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = Chars.transform.position + Vector3.forward;
             }
         }
@@ -75,7 +80,7 @@ public class GameManager : MonoBehaviour
     void InputsController()
     {
         //Controls char's x position
-        Chars.transform.position += new Vector3(joystick.Horizontal * sensivity * Time.deltaTime, 0, 0);
+        Chars.transform.position += new Vector3(joystick.Horizontal * jsSensivity * Time.deltaTime, 0, 0);
     }
 
     //If op is true, adds opNumber times player. Else, removes opNumber times player.
@@ -88,7 +93,7 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < opNumber; i++)
             {
                 Instantiate(Chars.transform.GetChild(0).gameObject,
-                            Chars.transform.GetChild(0).position,
+                            PlayerCountCv.transform.position,
                             Quaternion.identity,
                             Chars.transform);
             }
