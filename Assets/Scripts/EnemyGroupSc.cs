@@ -14,7 +14,6 @@ public class EnemyGroupSc : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         EnemyCountTx.text = numberOfEnemies.ToString();
         for (int i = 1; i < numberOfEnemies; i++)
         {
@@ -56,5 +55,6 @@ public class EnemyGroupSc : MonoBehaviour
             ce.transform.localPosition = Vector3.MoveTowards(ce.transform.localPosition, tp, groupSens * Time.deltaTime);
             yield return new WaitForSeconds(0.01f);
         }
+
     }
 }
