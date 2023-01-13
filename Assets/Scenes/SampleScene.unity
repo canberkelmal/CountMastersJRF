@@ -917,15 +917,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   joystick: {fileID: 1286561549}
   jsSensivity: 1
-  forwardSpeed: 0
+  forwardSpeed: 3
   CamSens: 5
   spawnSense: 4
   groupWalkSens: 3
   stopDist: 0.25
   playerCount: 1
-  setGroupDuration: 25
+  setGroupDuration: 40
   camOffs: {x: 0, y: 7.14, z: -7}
-  DistanceFactor: 1
+  DistanceFactor: 0.6
   Radius: 0.976
   PlayerCountCv: {fileID: 281774016}
   PlayerCountText: {fileID: 701160411}
@@ -1306,7 +1306,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1586812618}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.01
   m_Speed: 5
@@ -1441,6 +1441,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1586812619}
     m_Modifications:
+    - target: {fileID: 3781680142002427669, guid: 74c4a587b05df1e40925ddeb8c052db8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3781680142002427752, guid: 74c4a587b05df1e40925ddeb8c052db8,
         type: 3}
       propertyPath: m_Name

@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < Chars.transform.childCount; i++)
             {
-                Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, Vector3.zero, groupWalkSens * Time.deltaTime);
+                //Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, Vector3.zero, groupWalkSens * Time.deltaTime);
 
                 /*Chars.transform.GetChild(i).position = Vector3.MoveTowards(Chars.transform.GetChild(i).position,
                                                                            PlayerCountCv.transform.position - (Vector3.up * PlayerCountCv.transform.position.y) + (Vector3.up*0.1f),
@@ -133,9 +133,11 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
             StartCoroutine(SetGroupPos(Chars.transform.GetChild(i).gameObject, i));
-            //PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
+
+            PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
+            PlayerNavMesh.avoidancePriority = i >= 99 ? 99 : i + 1;
+
             //PlayerNavMesh.avoidancePriority = i % 2 == 0 ? i : i + 1;
-            //PlayerNavMesh.avoidancePriority = i >= 99 ? 99 : i;
 
             /*if (Chars.transform.GetChild(i).position.x < -4.5f || Chars.transform.GetChild(i).position.x > 4.5f)
             {
@@ -197,6 +199,13 @@ public class GameManager : MonoBehaviour
             Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, TargetPos, spawnSense * Time.deltaTime);
             yield return new WaitForSeconds(0.01f);
         }
+
+        for (int i = 0; i < setGroupDuration*2; i++)
+        {
+            Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, Vector3.zero, spawnSense * Time.deltaTime);
+            yield return new WaitForSeconds(0.01f);
+        }
+
         groupTrig = true;
     }
 }
