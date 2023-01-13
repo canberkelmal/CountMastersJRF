@@ -919,14 +919,16 @@ MonoBehaviour:
   jsSensivity: 1
   forwardSpeed: 3
   CamSens: 5
-  spawnSense: 4
+  spawnSense: 20
+  distortionRate: 0.1
+  distortion: 0
   groupWalkSens: 3
   stopDist: 0.25
   playerCount: 1
-  setGroupDuration: 40
+  setGroupDuration: 100
   camOffs: {x: 0, y: 7.14, z: -7}
-  DistanceFactor: 0.6
-  Radius: 0.976
+  DistanceFactor: 0.2
+  Radius: 0.85
   PlayerCountCv: {fileID: 281774016}
   PlayerCountText: {fileID: 701160411}
 --- !u!4 &958941396
@@ -1444,7 +1446,7 @@ PrefabInstance:
     - target: {fileID: 3781680142002427669, guid: 74c4a587b05df1e40925ddeb8c052db8,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3781680142002427752, guid: 74c4a587b05df1e40925ddeb8c052db8,
         type: 3}

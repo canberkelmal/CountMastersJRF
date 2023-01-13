@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
+using static UnityEngine.InputManagerEntry;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class GameManager : MonoBehaviour
     GameObject Chars, EndPoint;
     public Joystick joystick;
     Rigidbody rb;
-    public float jsSensivity, forwardSpeed, CamSens, spawnSense, groupWalkSens, stopDist;
+    public float jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
+    List<float> distortions = new List<float>();
 
     public int playerCount = 1;
     public int setGroupDuration = 25;
@@ -25,7 +27,7 @@ public class GameManager : MonoBehaviour
     NavMeshAgent PlayerNavMesh;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
-    float[] rads;
+    //float[] rads;
     bool groupTrig = true;
 
     public Canvas PlayerCountCv;
@@ -41,7 +43,8 @@ public class GameManager : MonoBehaviour
         EndPoint = GameObject.Find("End Point");
         //tgRb = tg.GetComponent<Rigidbody>();
         rb = Chars.GetComponent<Rigidbody>();
-        rads = new float[] {UnityEngine.Random.Range(0, 1)};
+        //rads = new float[] {UnityEngine.Random.Range(0, 1)};
+        distortions.Add(UnityEngine.Random.Range(-distortionRate, distortionRate));
     }
 
     // Update is called once per frame
@@ -71,6 +74,12 @@ public class GameManager : MonoBehaviour
                                                                            groupWalkSens * Time.deltaTime);*/
 
                 //Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = Chars.transform.position + Vector3.forward;
+
+                x = DistanceFactor * Mathf.Sqrt(i) * Mathf.Cos(i * Radius) + distortions[i];
+                z = DistanceFactor * Mathf.Sqrt(i) * Mathf.Sin(i * Radius) + distortions[i];
+                TargetPos = new Vector3(x, 0, z);
+
+                Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, TargetPos, spawnSense * Time.deltaTime);
             }
         }
         //Chars.GetComponent<NavMeshAgent>().destination = Chars.GetComponent<NavMeshAgent>().destination + Vector3.forward;
@@ -93,9 +102,11 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < opNumber; i++)
             {
                 Instantiate(Chars.transform.GetChild(0).gameObject,
-                            PlayerCountCv.transform.position,
+                            Chars.transform.position,
                             Quaternion.identity,
                             Chars.transform);
+
+                distortions.Add(UnityEngine.Random.Range(-distortionRate, distortionRate));
             }
             //camOffs += new Vector3(0, t, -t);
         }
@@ -107,12 +118,13 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < opNumber; i++)
             {
                 Destroy(Chars.transform.GetChild(t - i).gameObject);
+                distortions.Remove(distortions.Count - 1);
             }
             //camOffs += new Vector3(0, t, -t);
         }
 
         SetPlayersPos();
-        SetPlayerCount();        
+        SetPlayerCount();
 
         /*rads = new float[playerCount];
         for (int i = 0; i < rads.Length; i++)
@@ -132,10 +144,10 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
-            StartCoroutine(SetGroupPos(Chars.transform.GetChild(i).gameObject, i));
+            //StartCoroutine(SetGroupPos(Chars.transform.GetChild(i).gameObject, i));
 
-            PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
-            PlayerNavMesh.avoidancePriority = i >= 99 ? 99 : i + 1;
+            //PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
+            //PlayerNavMesh.avoidancePriority = i >= 99 ? 99 : i + 1;
 
             //PlayerNavMesh.avoidancePriority = i % 2 == 0 ? i : i + 1;
 
@@ -194,17 +206,17 @@ public class GameManager : MonoBehaviour
             //Must be modified as written ourself
             x = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Cos(ind * Radius);
             z = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Sin(ind * Radius);
-            TargetPos = new Vector3(x, Chars.transform.GetChild(ind).localPosition.y, z);
+            TargetPos = new Vector3(x, 0, z);
 
             Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, TargetPos, spawnSense * Time.deltaTime);
             yield return new WaitForSeconds(0.01f);
         }
 
-        for (int i = 0; i < setGroupDuration*2; i++)
+        /*for (int i = 0; i < setGroupDuration; i++)
         {
             Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, Vector3.zero, spawnSense * Time.deltaTime);
             yield return new WaitForSeconds(0.01f);
-        }
+        }*/
 
         groupTrig = true;
     }
