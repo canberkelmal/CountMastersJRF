@@ -916,19 +916,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystick: {fileID: 1286561549}
-  jsSensivity: 1
-  forwardSpeed: 3
+  jsSensivity: 3
+  forwardSpeed: 1
   CamSens: 5
-  spawnSense: 20
+  spawnSense: 10
   distortionRate: 0.1
   distortion: 0
-  groupWalkSens: 3
+  groupWalkSens: 0.3
   stopDist: 0.25
   playerCount: 1
-  setGroupDuration: 100
-  camOffs: {x: 0, y: 7.14, z: -7}
-  DistanceFactor: 0.2
-  Radius: 0.85
+  setGroupDuration: 50
+  camOffs: {x: 0, y: 7.58, z: -8.79}
+  DistanceFactor: 0.22
+  Radius: 0.951
   PlayerCountCv: {fileID: 281774016}
   PlayerCountText: {fileID: 701160411}
 --- !u!4 &958941396
@@ -1446,6 +1446,11 @@ PrefabInstance:
     - target: {fileID: 3781680142002427669, guid: 74c4a587b05df1e40925ddeb8c052db8,
         type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781680142002427669, guid: 74c4a587b05df1e40925ddeb8c052db8,
+        type: 3}
+      propertyPath: avoidancePriority
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3781680142002427752, guid: 74c4a587b05df1e40925ddeb8c052db8,

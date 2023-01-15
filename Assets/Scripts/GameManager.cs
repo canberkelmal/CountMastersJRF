@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
             //camOffs += new Vector3(0, t, -t);
         }
 
-        SetPlayersPos();
+        //SetPlayersPos();
         SetPlayerCount();
 
         /*rads = new float[playerCount];
@@ -144,12 +144,12 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
-            //StartCoroutine(SetGroupPos(Chars.transform.GetChild(i).gameObject, i));
+            StartCoroutine(SetGroupPos(Chars.transform.GetChild(i).gameObject, i));
 
             //PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
             //PlayerNavMesh.avoidancePriority = i >= 99 ? 99 : i + 1;
 
-            //PlayerNavMesh.avoidancePriority = i % 2 == 0 ? i : i + 1;
+            //PlayerNavMesh.avoidancePriority = i % 2 == 0 ? i+1 : i + 2;
 
             /*if (Chars.transform.GetChild(i).position.x < -4.5f || Chars.transform.GetChild(i).position.x > 4.5f)
             {
@@ -200,12 +200,14 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SetGroupPos(GameObject Runner, int ind)
     {
-        groupTrig = false;
+        if(ind == 0)
+            groupTrig = false;
+
         for (int i = 0; i < setGroupDuration; i++)
         {
             //Must be modified as written ourself
-            x = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Cos(ind * Radius);
-            z = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Sin(ind * Radius);
+            x = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Cos(ind * Radius) + distortions[ind];
+            z = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Sin(ind * Radius) + distortions[ind];
             TargetPos = new Vector3(x, 0, z);
 
             Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, TargetPos, spawnSense * Time.deltaTime);
@@ -217,7 +219,7 @@ public class GameManager : MonoBehaviour
             Runner.transform.localPosition = Vector3.MoveTowards(Runner.transform.localPosition, Vector3.zero, spawnSense * Time.deltaTime);
             yield return new WaitForSeconds(0.01f);
         }*/
-
-        groupTrig = true;
+        if(ind == Chars.transform.childCount-1)
+            groupTrig = true;
     }
 }
