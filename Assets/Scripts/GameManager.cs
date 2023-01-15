@@ -73,13 +73,13 @@ public class GameManager : MonoBehaviour
                                                                            PlayerCountCv.transform.position - (Vector3.up * PlayerCountCv.transform.position.y) + (Vector3.up*0.1f),
                                                                            groupWalkSens * Time.deltaTime);*/
 
-                //Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = Chars.transform.position + Vector3.forward;
+                Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = Chars.transform.position;
 
-                x = DistanceFactor * Mathf.Sqrt(i) * Mathf.Cos(i * Radius) + distortions[i];
+                /*x = DistanceFactor * Mathf.Sqrt(i) * Mathf.Cos(i * Radius) + distortions[i];
                 z = DistanceFactor * Mathf.Sqrt(i) * Mathf.Sin(i * Radius) + distortions[i];
                 TargetPos = new Vector3(x, 0, z);
 
-                Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, TargetPos, spawnSense * Time.deltaTime);
+                Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition, TargetPos, spawnSense * Time.deltaTime);*/
             }
         }
         //Chars.GetComponent<NavMeshAgent>().destination = Chars.GetComponent<NavMeshAgent>().destination + Vector3.forward;
@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
             //camOffs += new Vector3(0, t, -t);
         }
 
-        //SetPlayersPos();
+        SetPlayersPos();
         SetPlayerCount();
 
         /*rads = new float[playerCount];
@@ -146,10 +146,10 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(SetGroupPos(Chars.transform.GetChild(i).gameObject, i));
 
-            //PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
+            PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
             //PlayerNavMesh.avoidancePriority = i >= 99 ? 99 : i + 1;
 
-            //PlayerNavMesh.avoidancePriority = i % 2 == 0 ? i+1 : i + 2;
+            PlayerNavMesh.avoidancePriority = i % 2 == 0 ? i+1 : i + 2;
 
             /*if (Chars.transform.GetChild(i).position.x < -4.5f || Chars.transform.GetChild(i).position.x > 4.5f)
             {
