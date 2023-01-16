@@ -8,16 +8,18 @@ public class EnemyGroupSc : MonoBehaviour
     public int numberOfEnemies;
     public float groupSens;
     public Text EnemyCountTx;
+    public GameObject refEnemy;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
 
     // Start is called before the first frame update
     void Start()
     {
+        refEnemy = transform.GetChild(2).gameObject;
         EnemyCountTx.text = numberOfEnemies.ToString();
-        for (int i = 1; i < numberOfEnemies; i++)
+        for (int i = 0; i < numberOfEnemies; i++)
         {
-            Instantiate(transform.GetChild(1).gameObject, transform.GetChild(1).position, transform.rotation, this.transform);
+            Instantiate(refEnemy, refEnemy.transform.position, transform.rotation, this.transform);
         }
         SetEnemyPos();
     }
@@ -25,7 +27,7 @@ public class EnemyGroupSc : MonoBehaviour
     //Set the target position for each enemy
     void SetEnemyPos()
     {
-        for (int i = 1; i < numberOfEnemies; i++)
+        for (int i = 2; i < numberOfEnemies; i++)
         {
             GameObject currentEnemy = transform.GetChild(i).gameObject;
             //Must be modified as written ourself
