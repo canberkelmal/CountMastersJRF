@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class EnemyGroupSc : MonoBehaviour
@@ -57,6 +58,12 @@ public class EnemyGroupSc : MonoBehaviour
             ce.transform.localPosition = Vector3.MoveTowards(ce.transform.localPosition, tp, groupSens * Time.deltaTime);
             yield return new WaitForSeconds(0.01f);
         }
+        //ce.GetComponent<NavMeshAgent>().enabled = false;
+
+    }
+
+    public void Triggered()
+    {
 
     }
 }
