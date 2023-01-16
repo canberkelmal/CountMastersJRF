@@ -9,21 +9,26 @@ public class EnemyGroupSc : MonoBehaviour
     public int numberOfEnemies;
     public float groupSens;
     public Text EnemyCountTx;
-    public GameObject refEnemy;
+    public GameObject refEnemy, chars;
+    GameManager gm;
+    float tempJsSensivity;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
 
     // Start is called before the first frame update
     void Start()
     {
+        chars = GameObject.Find("Chars");
         refEnemy = transform.GetChild(2).gameObject;
         EnemyCountTx.text = numberOfEnemies.ToString();
+        gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
         for (int i = 0; i < numberOfEnemies; i++)
         {
             Instantiate(refEnemy, refEnemy.transform.position, transform.rotation, this.transform);
         }
         SetEnemyPos();
     }
+
 
     //Set the target position for each enemy
     void SetEnemyPos()
@@ -46,6 +51,8 @@ public class EnemyGroupSc : MonoBehaviour
         EnemyCountTx.text = numberOfEnemies.ToString();
         if(numberOfEnemies==0)
         {
+            gm.jsSensivity = tempJsSensivity;
+            gm.runToEnemy = false;
             Destroy(gameObject);
         }
     }
@@ -64,6 +71,15 @@ public class EnemyGroupSc : MonoBehaviour
 
     public void Triggered()
     {
+        tempJsSensivity = gm.jsSensivity;
+        gm.jsSensivity = 0;
+        gm.targetEnemy = this.transform.gameObject;
+        gm.runToEnemy= true;
+        for (int i = 2; i < numberOfEnemies+2; i++)
+        {
+            GameObject currentEnemy = transform.GetChild(i).gameObject;
 
+            currentEnemy.GetComponent<NavMeshAgent>().destination = chars.transform.position;            
+        }
     }
 }

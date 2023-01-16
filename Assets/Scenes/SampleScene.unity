@@ -953,6 +953,8 @@ MonoBehaviour:
   Radius: 0.951
   PlayerCountCv: {fileID: 281774016}
   PlayerCountText: {fileID: 701160411}
+  runToEnemy: 0
+  targetEnemy: {fileID: 0}
 --- !u!4 &958941396
 Transform:
   m_ObjectHideFlags: 0
@@ -1610,7 +1612,7 @@ PrefabInstance:
     - target: {fileID: 3781680142002427669, guid: 74c4a587b05df1e40925ddeb8c052db8,
         type: 3}
       propertyPath: m_Speed
-      value: 0.1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3781680142002427669, guid: 74c4a587b05df1e40925ddeb8c052db8,
         type: 3}
@@ -1808,7 +1810,7 @@ PrefabInstance:
     - target: {fileID: 542163576987018262, guid: 55a2cc42f8ff7214ea471af9a05a588a,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 3955
+      value: 3958
       objectReference: {fileID: 0}
     - target: {fileID: 1380500039733489327, guid: 55a2cc42f8ff7214ea471af9a05a588a,
         type: 3}
@@ -1892,8 +1894,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6783992572244905867, guid: 55a2cc42f8ff7214ea471af9a05a588a,
         type: 3}
+      propertyPath: m_Speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783992572244905867, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783992572244905975, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783992572244905975, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783992572244905975, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783992572244905975, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783992572244905975, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55a2cc42f8ff7214ea471af9a05a588a, type: 3}
