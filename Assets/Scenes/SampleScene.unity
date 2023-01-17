@@ -1242,13 +1242,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bbe69f085b701e47a8e745776ad1f4a, type: 3}
---- !u!43 &2040356169
+--- !u!43 &2014533260
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh27414
+  m_Name: pb_Mesh-1726
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1520,6 +1520,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 453543456064906074, guid: b5b47bf1c44af604da33a1cb1faebc52,
+        type: 3}
+      propertyPath: m_Speed
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 453543456064906074, guid: b5b47bf1c44af604da33a1cb1faebc52,
+        type: 3}
+      propertyPath: m_Acceleration
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 453543456064906074, guid: b5b47bf1c44af604da33a1cb1faebc52,
+        type: 3}
+      propertyPath: m_AngularSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 453543456064906074, guid: b5b47bf1c44af604da33a1cb1faebc52,
+        type: 3}
+      propertyPath: m_StoppingDistance
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 453543456064906074, guid: b5b47bf1c44af604da33a1cb1faebc52,
+        type: 3}
+      propertyPath: m_ObstacleAvoidanceType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 453543456276185682, guid: b5b47bf1c44af604da33a1cb1faebc52,
         type: 3}
       propertyPath: m_RootOrder
@@ -1691,22 +1716,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 2040356169}
+      objectReference: {fileID: 2014533260}
     - target: {fileID: 542163576987018262, guid: 55a2cc42f8ff7214ea471af9a05a588a,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 3964
+      value: 3967
       objectReference: {fileID: 0}
     - target: {fileID: 1380500039733489327, guid: 55a2cc42f8ff7214ea471af9a05a588a,
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 2040356169}
+      objectReference: {fileID: 2014533260}
     - target: {fileID: 2542997076147774794, guid: 55a2cc42f8ff7214ea471af9a05a588a,
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 2040356169}
+      objectReference: {fileID: 2014533260}
     - target: {fileID: 5683141111415831021, guid: 55a2cc42f8ff7214ea471af9a05a588a,
         type: 3}
       propertyPath: m_Name
