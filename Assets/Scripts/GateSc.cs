@@ -31,8 +31,8 @@ public class GateSc : MonoBehaviour
     void Start()
     {
         gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        leftGateText = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
-        rightGateText = transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Text>();
+        leftGateText = transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        rightGateText = transform.GetChild(1).GetChild(0).GetChild(1).GetComponent<Text>();
         
         switch (leftGateOp)
         {
