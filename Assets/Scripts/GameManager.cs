@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     GameObject Chars, EndPoint;
     public Joystick joystick;
     Rigidbody rb;
-    public float jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
+    public float towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
     List<float> distortions = new List<float>();
 
     public int playerCount = 1;
@@ -205,11 +205,44 @@ public class GameManager : MonoBehaviour
 
     public void ReachtoFinish()
     {
+        jsSensivity = 0;
+        groupTrig = false;
+
+        //Will keep char tower's current row
+        int row = 1;
+        int charCountonRow = 1;
+
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
             PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
             PlayerNavMesh.enabled = false;
         }
+
+        for (int i = 0; i < Chars.transform.childCount; i++)
+        {
+
+            Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance), (1-row) * towerVerticalDistance, 0);
+            for (int j = 1; j < charCountonRow; j++)
+            {
+                i++;
+                Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2*j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
+            }
+            //row++;
+            //Chars.transform.position += Vector3.up;
+            row++;
+            Chars.transform.position += Vector3.up * towerVerticalDistance;
+            for (int j = 0; j < charCountonRow; j++)
+            {
+                i++;
+                Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2*j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
+            }
+            row++;
+            Chars.transform.position += Vector3.up * towerVerticalDistance;
+            charCountonRow++;
+        }
+
+
+
     }
 
     IEnumerator SetGroupPos(GameObject Runner, int ind)
