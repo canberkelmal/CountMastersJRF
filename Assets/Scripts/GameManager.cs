@@ -203,6 +203,15 @@ public class GameManager : MonoBehaviour
         cam.transform.position = Vector3.Lerp(cam.transform.position, CamTargetPos, CamSens * Time.deltaTime);
     }
 
+    public void ReachtoFinish()
+    {
+        for (int i = 0; i < Chars.transform.childCount; i++)
+        {
+            PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
+            PlayerNavMesh.enabled = false;
+        }
+    }
+
     IEnumerator SetGroupPos(GameObject Runner, int ind)
     {
         if(ind == 0)
