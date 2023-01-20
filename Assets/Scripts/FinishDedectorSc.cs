@@ -10,7 +10,7 @@ public class FinishDedectorSc : MonoBehaviour
         if(other.tag == "Player")
         {
             GameObject.Find("Game Manager").GetComponent<GameManager>().ReachtoFinish();
-            this.gameObject.SetActive(false);
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
         }
     }
 }

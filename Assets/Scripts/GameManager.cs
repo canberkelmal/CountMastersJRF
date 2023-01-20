@@ -12,10 +12,11 @@ using static UnityEngine.InputManagerEntry;
 public class GameManager : MonoBehaviour
 {
     #region variables
-    GameObject Chars, EndPoint;
+    GameObject Chars, EndPoint, FinishLine;
     public Joystick joystick;
     Rigidbody rb;
-    public float towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
+    public float towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
+    
     List<float> distortions = new List<float>();
 
     public int playerCount = 1;
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
     //float[] rads;
-    bool groupTrig = true;
+    bool groupTrig = true, towering = false;
 
     public Canvas PlayerCountCv;
     public Text PlayerCountText;
@@ -36,11 +37,16 @@ public class GameManager : MonoBehaviour
     public GameObject targetEnemy;
     float mainPlayerAgentSpeed;
 
+    public int row = 1, charCountonRow = 1;
+    float endZ;
+
+
     #endregion
 
     // Start is called before the first frame update
     void Start()
     {
+        FinishLine = GameObject.Find("FinishLine");
         Chars = GameObject.Find("Chars");
         cam = GameObject.Find("Main Camera");
         EndPoint = GameObject.Find("End Point");
@@ -49,6 +55,7 @@ public class GameManager : MonoBehaviour
         //rads = new float[] {UnityEngine.Random.Range(0, 1)};
         distortions.Add(UnityEngine.Random.Range(-distortionRate, distortionRate));
         mainPlayerAgentSpeed = Chars.transform.GetChild(0).GetComponent<NavMeshAgent>().speed;
+        endZ = FinishLine.transform.position.z;
     }
 
     // Update is called once per frame
@@ -66,6 +73,10 @@ public class GameManager : MonoBehaviour
     {
         InputsController();
         CameraController();
+        if(Chars.transform.position.z > endZ && !towering)
+        {
+            ReachtoFinish();
+        }
 
         if (groupTrig)
         {
@@ -205,18 +216,20 @@ public class GameManager : MonoBehaviour
 
     public void ReachtoFinish()
     {
-        jsSensivity = 0;
+        jsSensivity = 1;
         groupTrig = false;
-
-        //Will keep char tower's current row
-        int row = 1;
-        int charCountonRow = 1;
+        
 
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
             PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
             PlayerNavMesh.enabled = false;
         }
+
+        towering = true;
+        //SetTowerPos();
+
+        //StartCoroutine(SetTowerPos());
 
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
@@ -240,54 +253,42 @@ public class GameManager : MonoBehaviour
             Chars.transform.position += Vector3.up * towerVerticalDistance;
             charCountonRow++;
         }
-
-
-
     }
 
-    IEnumerator SetTowerPos()
-    {
-        jsSensivity = 0;
-        groupTrig = false;
-
-        //Will keep char tower's current row
-        int row = 1;
-        int charCountonRow = 1;
-
-        for (int i = 0; i < Chars.transform.childCount; i++)
-        {
-            PlayerNavMesh = Chars.transform.GetChild(i).GetComponent<NavMeshAgent>();
-            PlayerNavMesh.enabled = false;
-        }
-
-        for (int i = 0; i < Chars.transform.childCount; i++)
-        {
-
-            Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
-            for (int j = 1; j < charCountonRow; j++)
+    void SetTowerPos()
+    { 
+            for (int i = 0; i < Chars.transform.childCount; i++)
             {
-                i++;
-                Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
+
+                Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition,
+                                                                                new Vector3(((charCountonRow - 1) * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0),
+                                                                                towerSense * Time.deltaTime);
+                for (int j = 1; j < charCountonRow; j++)
+                {
+                    i++;
+                    Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition,
+                                                                                    new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0),
+                                                                                    towerSense * Time.deltaTime);
+                }
+                //row++;
+                //Chars.transform.position += Vector3.up;
+                row++;
+                Chars.transform.position = Vector3.MoveTowards(Chars.transform.position,
+                                                               Chars.transform.position + Vector3.up * towerVerticalDistance,
+                                                               towerSense * Time.deltaTime);
+                for (int j = 0; j < charCountonRow; j++)
+                {
+                    i++;
+                    Chars.transform.GetChild(i).localPosition = Vector3.MoveTowards(Chars.transform.GetChild(i).localPosition,
+                                                                                    new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0),
+                                                                                    towerSense * Time.deltaTime);
+                }
+                row++;
+                Chars.transform.position = Vector3.MoveTowards(Chars.transform.position,
+                                                               Chars.transform.position + Vector3.up * towerVerticalDistance,
+                                                               towerSense * Time.deltaTime);
+                charCountonRow++;
             }
-            //row++;
-            //Chars.transform.position += Vector3.up;
-            row++;
-            Chars.transform.position += Vector3.up * towerVerticalDistance;
-            for (int j = 0; j < charCountonRow; j++)
-            {
-                i++;
-                Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
-            }
-            row++;
-            Chars.transform.position += Vector3.up * towerVerticalDistance;
-            charCountonRow++;
-        }
-
-
-
-
-
-        yield return new WaitForSeconds(0.01f);
     }
 
     IEnumerator SetGroupPos(GameObject Runner, int ind)
