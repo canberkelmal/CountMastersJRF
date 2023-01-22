@@ -235,7 +235,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
-
+            Chars.transform.GetChild(i).SetParent(Tower.transform); //tower script
             Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance), (1-row) * towerVerticalDistance, 0);
             for (int j = 1; j < charCountonRow; j++)
             {
