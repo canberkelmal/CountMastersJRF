@@ -12,7 +12,7 @@ using static UnityEngine.InputManagerEntry;
 public class GameManager : MonoBehaviour
 {
     #region variables
-    GameObject Chars, EndPoint, FinishLine;
+    GameObject Chars, Tower, FinishLine;
     public Joystick joystick;
     Rigidbody rb;
     public float towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
         FinishLine = GameObject.Find("FinishLine");
         Chars = GameObject.Find("Chars");
         cam = GameObject.Find("Main Camera");
-        EndPoint = GameObject.Find("End Point");
+        Tower = GameObject.Find("Tower");
         //tgRb = tg.GetComponent<Rigidbody>();
         rb = Chars.GetComponent<Rigidbody>();
         //rads = new float[] {UnityEngine.Random.Range(0, 1)};
@@ -219,6 +219,7 @@ public class GameManager : MonoBehaviour
         jsSensivity = 1;
         groupTrig = false;
         
+        
 
         for (int i = 0; i < Chars.transform.childCount; i++)
         {
@@ -227,6 +228,7 @@ public class GameManager : MonoBehaviour
         }
 
         towering = true;
+        Tower.transform.position = Chars.transform.position;
         //SetTowerPos();
 
         //StartCoroutine(SetTowerPos());
