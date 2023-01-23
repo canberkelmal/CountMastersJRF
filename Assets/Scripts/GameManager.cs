@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     GameObject Chars, Tower, FinishLine;
     public Joystick joystick;
     Rigidbody rb;
-    public float towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
+    public float setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
     
     List<float> distortions = new List<float>();
 
@@ -305,6 +305,18 @@ public class GameManager : MonoBehaviour
             charCountonRow++;
             yield return new WaitForSeconds(0.01f);
         }
+    }
+
+    IEnumerator SetCharPos(GameObject curChar, Vector3 targetLocPos)
+    {
+        for (int i = 0; i < setCharPosDur; i++)
+        {
+           curChar.transform.localPosition = Vector3.MoveTowards(curChar.transform.localPosition,
+                                                                 ((charCountonRow - 1) * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0,
+                                                                 targetLocPosSense * Time.deltaTime);
+        }
+
+        yield return new WaitForSeconds(0.01f);
     }
 
     IEnumerator SetGroupPos(GameObject Runner, int ind)

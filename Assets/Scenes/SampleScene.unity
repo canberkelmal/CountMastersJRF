@@ -1091,6 +1091,11 @@ PrefabInstance:
       propertyPath: m_FontData.m_FontSize
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5961860244004862788, guid: 0063c36c27fe9ed4eb4049f6592f1747,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 63
+      objectReference: {fileID: 0}
     - target: {fileID: 5961860244004862789, guid: 0063c36c27fe9ed4eb4049f6592f1747,
         type: 3}
       propertyPath: m_DynamicPixelsPerUnit
@@ -1368,6 +1373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystick: {fileID: 1286561549}
+  setCharPosDur: 0
   towerAnimDur: 500
   towerSense: 10
   towerHorizontalDistance: 0.135
@@ -1983,7 +1989,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1758
+  m_Name: pb_Mesh-1762
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2585,7 +2591,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.99942017, y: 637.6218}
+  m_AnchoredPosition: {x: -0.99942017, y: 460}
   m_SizeDelta: {x: 830, y: 516.874}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1971742033
@@ -2781,7 +2787,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 63
 --- !u!114 &2120934464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2794,7 +2800,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -2864,6 +2870,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Speed
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 453543456064906074, guid: b5b47bf1c44af604da33a1cb1faebc52,
+        type: 3}
+      propertyPath: m_Height
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 453543456064906074, guid: b5b47bf1c44af604da33a1cb1faebc52,
         type: 3}
