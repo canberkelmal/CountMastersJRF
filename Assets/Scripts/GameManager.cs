@@ -289,8 +289,11 @@ public class GameManager : MonoBehaviour
             for (int j = 1; j < charCountonRow; j++)
             {
                 i++;
-                Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
+                //Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
+                StartCoroutine(SetCharPos(Chars.transform.GetChild(i).gameObject,
+                                          new Vector3( ((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0) ) );
             }
+            yield return new WaitForSeconds(0.01f * setCharPosDur);//wait for the row position set
             //row++;
             //Chars.transform.position += Vector3.up;
             row++;
@@ -311,12 +314,18 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < setCharPosDur; i++)
         {
-           curChar.transform.localPosition = Vector3.MoveTowards(curChar.transform.localPosition,
-                                                                 ((charCountonRow - 1) * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0,
-                                                                 targetLocPosSense * Time.deltaTime);
-        }
+           curChar.transform.localPosition = Vector3.MoveTowards(curChar.transform.localPosition, targetLocPos, targetLocPosSense * Time.deltaTime);
+           yield return new WaitForSeconds(0.01f);
+        }        
+    }
 
-        yield return new WaitForSeconds(0.01f);
+    IEnumerator SetTowerPos()
+    {
+        for (int i = 0; i < setCharPosDur; i++)
+        {
+            Tower.transform.localPosition = Vector3.MoveTowards(curChar.transform.localPosition, targetLocPos, targetLocPosSense * Time.deltaTime);
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 
     IEnumerator SetGroupPos(GameObject Runner, int ind)
