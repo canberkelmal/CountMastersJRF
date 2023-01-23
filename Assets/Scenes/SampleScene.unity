@@ -317,6 +317,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: saw1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9ce479ec8bb1a9e45a549504a24744ec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1436720008062113814, guid: 9ce479ec8bb1a9e45a549504a24744ec,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -717,7 +722,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 513112999}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -20.758398, y: -19.064196, z: 66.13544}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1373,7 +1378,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystick: {fileID: 1286561549}
-  setCharPosDur: 0
+  towerIncreseSens: 1.65
+  setCharPosDur: 45
+  targetLocPosSense: 20
   towerAnimDur: 500
   towerSense: 10
   towerHorizontalDistance: 0.135
@@ -1741,6 +1748,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gate (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3390942631564826601, guid: 1bbe69f085b701e47a8e745776ad1f4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3390942631675278213, guid: 1bbe69f085b701e47a8e745776ad1f4a,
         type: 3}
       propertyPath: m_Layer
@@ -1844,6 +1856,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: grounded_with_thorns (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 60961301bb0b18e4da77a2244ab5295c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8435447439373415028, guid: 60961301bb0b18e4da77a2244ab5295c,
         type: 3}
@@ -1964,7 +1981,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428286404}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.57, z: 85.5}
+  m_LocalPosition: {x: 0, y: -0.57, z: 24.9}
   m_LocalScale: {x: 8, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2328,6 +2345,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: saw2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b7021ee586fe29b45809d1543ec0ed63,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7021ee586fe29b45809d1543ec0ed63, type: 3}
 --- !u!1001 &1632518608
@@ -2672,7 +2694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2119935280
 Transform:
   m_ObjectHideFlags: 0
@@ -2977,6 +2999,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 619046028}
     m_Modifications:
+    - target: {fileID: 440528291605447462, guid: 1bbe69f085b701e47a8e745776ad1f4a,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 63
+      objectReference: {fileID: 0}
     - target: {fileID: 3390942631564826600, guid: 1bbe69f085b701e47a8e745776ad1f4a,
         type: 3}
       propertyPath: m_RootOrder
@@ -3062,6 +3089,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6888542233580673956, guid: 1bbe69f085b701e47a8e745776ad1f4a,
+        type: 3}
+      propertyPath: RightGateValue
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bbe69f085b701e47a8e745776ad1f4a, type: 3}
 --- !u!1001 &5683141111019961164
@@ -3103,6 +3135,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemies
+      objectReference: {fileID: 0}
+    - target: {fileID: 5683141111415831021, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5683141111415831023, guid: 55a2cc42f8ff7214ea471af9a05a588a,
         type: 3}
@@ -3227,6 +3264,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gate (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3390942631564826601, guid: 1bbe69f085b701e47a8e745776ad1f4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bbe69f085b701e47a8e745776ad1f4a, type: 3}
