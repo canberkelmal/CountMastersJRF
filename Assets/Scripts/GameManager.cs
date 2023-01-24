@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
     //float[] rads;
-    bool groupTrig = true, towering = false;
+    bool groupTrig = true, towering = false, lockTowerY = false;
 
     public Canvas PlayerCountCv;
     public Text PlayerCountText;
@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
 
     public int row = 1, charCountonRow = 1;
     float endZ;
+    float towerLastY;
 
 
     #endregion
@@ -74,9 +75,8 @@ public class GameManager : MonoBehaviour
         InputsController();
         CameraController();
         if(Chars.transform.position.z > endZ && !towering)
-        {
             ReachtoFinish();
-        }
+
         if (towering)
             SetTheTowerPos();
 
@@ -200,6 +200,7 @@ public class GameManager : MonoBehaviour
 
     void CameraController()
     {
+
         for(int i=0; i < Chars.transform.childCount; i++)
         {
             //camX += Chars.transform.GetChild(i).position.x < 0 ? Chars.transform.GetChild(i).position.x * -1 : Chars.transform.GetChild(i).position.x;
@@ -207,7 +208,7 @@ public class GameManager : MonoBehaviour
             camZ += Chars.transform.GetChild(i).position.z;
         }
 
-        CamTargetPos = new Vector3(camX/Chars.transform.childCount, 0, camZ / Chars.transform.childCount) + camOffs;
+        CamTargetPos = !towering ? new Vector3(camX/Chars.transform.childCount, 0, camZ / Chars.transform.childCount) + camOffs : Tower.transform.position + camOffs;
         PlayerCountCv.transform.position = CamTargetPos - camOffs + (Vector3.up * 1.52f);
 
         camX = 0;
@@ -218,7 +219,7 @@ public class GameManager : MonoBehaviour
 
     public void ReachtoFinish()
     {
-        jsSensivity = 1;
+        //jsSensivity = 1;
         groupTrig = false;
         
 
@@ -285,9 +286,10 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SetTowerPos()
     {
-        while(Chars.transform.childCount> 0) { 
+        while(charCountonRow < Chars.transform.childCount) { 
             int i = 0;
             //Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
+            
 
             SetTowerElement(Chars.transform.GetChild(i).gameObject,
                  new Vector3(((charCountonRow - 1) * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0));
@@ -305,6 +307,14 @@ public class GameManager : MonoBehaviour
             //Chars.transform.position += Vector3.up * towerVerticalDistance;
 
             row++;
+            if (charCountonRow > Chars.transform.childCount)
+            {
+                while (Chars.transform.childCount > 0)
+                {
+                    Destroy(Chars.transform.GetChild(0).transform);
+                }
+                break;
+            }
             //StartCoroutine(SetTheTowerPos());
             //yield return new WaitForSeconds(0.01f * (setCharPosDur));//wait for the tower position set
 
@@ -313,15 +323,24 @@ public class GameManager : MonoBehaviour
                 //i++;
                 //Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
                 SetTowerElement(Chars.transform.GetChild(i).gameObject,
-                               new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0 ));
+                     new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0 ));
             }
             //Chars.transform.position += Vector3.up * towerVerticalDistance;
 
             yield return new WaitForSeconds(0.01f * (setCharPosDur));//wait for the tower position set
             row++;
+            if (charCountonRow > Chars.transform.childCount)
+            {
+                while (Chars.transform.childCount > 0)
+                {
+                    Destroy(Chars.transform.GetChild(0).transform);
+                }
+                break;
+            }
             //StartCoroutine(SetTheTowerPos());
             charCountonRow++;
         }
+        lockTowerY = true;
     }
 
     void SetTowerElement(GameObject towerElement, Vector3 targetLocPos)
@@ -343,7 +362,9 @@ public class GameManager : MonoBehaviour
 
     void SetTheTowerPos()
     {
-        towerTargerPos = new Vector3(Chars.transform.position.x, Tower.transform.position.y + towerIncreseSens * Time.deltaTime, Chars.transform.position.z);
+        towerLastY = !lockTowerY ? Tower.transform.position.y + towerIncreseSens * Time.deltaTime : row* towerVerticalDistance - 0.9f;
+        towerTargerPos = new Vector3(Chars.transform.position.x, towerLastY, Chars.transform.position.z);
+        
         Tower.transform.position = Vector3.MoveTowards(Tower.transform.position, towerTargerPos, targetLocPosSense * Time.deltaTime);
     }
 
