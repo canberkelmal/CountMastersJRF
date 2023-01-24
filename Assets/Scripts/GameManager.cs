@@ -317,7 +317,7 @@ public class GameManager : MonoBehaviour
             //StartCoroutine(SetTheTowerPos());
             //yield return new WaitForSeconds(0.01f * (setCharPosDur));//wait for the tower position set
 
-            for (int j = 0; j < charCountonRow; j++)
+            for (int j = 0; j < charCountonRow && Chars.transform.childCount>0; j++)
             {
                 //i++;
                 //Chars.transform.GetChild(i).localPosition = new Vector3(((charCountonRow - 1) * towerHorizontalDistance) - (2 * j * towerHorizontalDistance), (1 - row) * towerVerticalDistance, 0);
@@ -364,7 +364,7 @@ public class GameManager : MonoBehaviour
 
     void SetTheTowerPos()
     {
-        towerLastY = !lockTowerY ? Tower.transform.position.y + towerIncreseSens * Time.deltaTime : row* towerVerticalDistance - 0.9f;
+        towerLastY = !lockTowerY ? Tower.transform.position.y + towerIncreseSens * Time.deltaTime : row* towerVerticalDistance - 1.7f;
         towerTargerPos = new Vector3(Chars.transform.position.x, towerLastY, Chars.transform.position.z);
         
         Tower.transform.position = Vector3.MoveTowards(Tower.transform.position, towerTargerPos, targetLocPosSense * Time.deltaTime);
