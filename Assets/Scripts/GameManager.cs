@@ -307,14 +307,13 @@ public class GameManager : MonoBehaviour
             //Chars.transform.position += Vector3.up * towerVerticalDistance;
 
             row++;
-            if (charCountonRow > Chars.transform.childCount)
+            /*if (charCountonRow > Chars.transform.childCount)
             {
                 while (Chars.transform.childCount > 0)
                 {
-                    Destroy(Chars.transform.GetChild(0).transform);
+                    Destroy(Chars.transform.GetChild(0).gameObject);
                 }
-                break;
-            }
+            }*/
             //StartCoroutine(SetTheTowerPos());
             //yield return new WaitForSeconds(0.01f * (setCharPosDur));//wait for the tower position set
 
@@ -333,13 +332,16 @@ public class GameManager : MonoBehaviour
             {
                 while (Chars.transform.childCount > 0)
                 {
-                    Destroy(Chars.transform.GetChild(0).transform);
+                    Destroy(Chars.transform.GetChild(0).gameObject);
                 }
-                break;
             }
             //StartCoroutine(SetTheTowerPos());
             charCountonRow++;
         }
+        /*while (Chars.transform.childCount > 0)
+        {
+            Destroy(Chars.transform.GetChild(0).gameObject);
+        }*/
         lockTowerY = true;
     }
 
