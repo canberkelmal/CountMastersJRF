@@ -208,7 +208,8 @@ public class GameManager : MonoBehaviour
             camZ += Chars.transform.GetChild(i).position.z;
         }
 
-        CamTargetPos = !towering ? new Vector3(camX/Chars.transform.childCount, 0, camZ / Chars.transform.childCount) + camOffs : Tower.transform.position + camOffs - (Tower.transform.position.y * Vector3.up/2);
+        CamTargetPos = !towering ? new Vector3(camX/Chars.transform.childCount, 0, camZ / Chars.transform.childCount) + camOffs
+                                 : Tower.transform.position + camOffs - (Tower.transform.position.y * Vector3.up/2);
         PlayerCountCv.transform.position = CamTargetPos - camOffs + (Vector3.up * 1.52f);
 
         camX = 0;
