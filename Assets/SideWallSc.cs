@@ -8,10 +8,19 @@ using UnityEngine.AI;
 public class SideWallSc : MonoBehaviour
 {
     public float removeDelay;
+    GameManager gm;
+
+    void Start()
+    {
+        gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Player")
         {
+            gm.AddRemove(false, 1);
+            other.transform.parent = null;
+
             other.gameObject.GetComponent<NavMeshAgent>().enabled= false;
             other.AddComponent<Rigidbody>();
             StartCoroutine(CharRemover(other.gameObject));

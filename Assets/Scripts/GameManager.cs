@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
             int t = Chars.transform.childCount - 1;
             for (int i = 0; i < opNumber; i++)
             {
-                Destroy(Chars.transform.GetChild(t - i).gameObject);
+                //Destroy(Chars.transform.GetChild(t - i).gameObject);
                 distortions.Remove(distortions.Count - 1);
             }
             //camOffs += new Vector3(0, t, -t);
