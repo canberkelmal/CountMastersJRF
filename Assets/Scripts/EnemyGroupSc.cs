@@ -22,7 +22,7 @@ public class EnemyGroupSc : MonoBehaviour
         refEnemy = transform.GetChild(2).gameObject;
         EnemyCountTx.text = numberOfEnemies.ToString();
         gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        for (int i = 0; i < numberOfEnemies; i++)
+        for (int i = 1; i < numberOfEnemies; i++)
         {
             Instantiate(refEnemy, refEnemy.transform.position, transform.rotation, this.transform);
         }
