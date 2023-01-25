@@ -4,24 +4,20 @@ using UnityEngine;
 
 public class TrigCircleSc : MonoBehaviour
 {
-    GameManager gm;
     EnemyGroupSc enSc;
-    GameObject enemies, chars;
-    bool trig = false;
+    GameObject enemies;
     void Start()
     {
         enemies = GameObject.Find("Enemies");
-        chars = GameObject.Find("Chars");
         enSc = enemies.GetComponent<EnemyGroupSc>();
-        gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         print("Enemy trigger circle is triggered by " + other.name);
-        if(other.tag == "Player" && !trig)
+        if(other.tag == "Player")
         {
-            trig = true;
+            this.gameObject.GetComponent<MeshCollider>().enabled = false;
             enSc.Triggered();
         }
     }

@@ -18,11 +18,11 @@ public class SideWallSc : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-            gm.AddRemove(false, 1);
+            gm.distortions.Remove(gm.distortions.Count - 1);
             other.transform.parent = null;
-
             other.gameObject.GetComponent<NavMeshAgent>().enabled= false;
             other.AddComponent<Rigidbody>();
+            gm.SetPlayerCount();
             StartCoroutine(CharRemover(other.gameObject));
         }
     }

@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     Rigidbody rb;
     public float towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
     
-    List<float> distortions = new List<float>();
+    public List<float> distortions = new List<float>();
 
     public int playerCount = 1;
     public int setGroupDuration = 25;

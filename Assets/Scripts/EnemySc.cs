@@ -20,13 +20,14 @@ public class EnemySc : MonoBehaviour
         print("Enemy Collision!" + other.gameObject.tag);
         if (other.gameObject.tag == "Player")
         {
+            this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+            other.gameObject.GetComponent<CapsuleCollider>().enabled = false;
             Instantiate(playerDeathSplashEffect, other.transform.position, Quaternion.identity);
             Instantiate(enemyDeathSplashEffect, this.transform.position + Vector3.up*enemySplachYOffset, Quaternion.identity);
             Destroy(other.gameObject);
-            Destroy(this.gameObject);
-
             gm.SetPlayerCount();
-            parentSc.SetCountText();
+            parentSc.SetCountText(this.gameObject);
+            //Destroy(this.gameObject);       
         }
     }
 }

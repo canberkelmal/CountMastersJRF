@@ -22,7 +22,7 @@ public class EnemyGroupSc : MonoBehaviour
         refEnemy = transform.GetChild(2).gameObject;
         EnemyCountTx.text = numberOfEnemies.ToString();
         gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        for (int i = 1; i < numberOfEnemies; i++)
+        for (int i = 2; i <= numberOfEnemies; i++)
         {
             Instantiate(refEnemy, refEnemy.transform.position, transform.rotation, this.transform);
         }
@@ -45,15 +45,19 @@ public class EnemyGroupSc : MonoBehaviour
     }
 
     //Decrease number of enemies
-    public void SetCountText()
+    public void SetCountText(GameObject triggeredEnemy)
     {
-        numberOfEnemies--;
+        numberOfEnemies = transform.childCount - 3;
         EnemyCountTx.text = numberOfEnemies.ToString();
         if(numberOfEnemies==0)
         {
             gm.jsSensivity = tempJsSensivity;
             gm.runToEnemy = false;
             Destroy(gameObject);
+        }
+        else
+        {
+            Destroy(triggeredEnemy);
         }
     }
 
