@@ -2658,6 +2658,7 @@ MonoBehaviour:
   distortion: 0
   groupWalkSens: 0.3
   stopDist: 0.25
+  distortions: []
   playerCount: 1
   setGroupDuration: 10
   camOffs: {x: 0, y: 11.47, z: -27.09}
@@ -5687,6 +5688,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5973176756093427908, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783992572244905867, guid: 55a2cc42f8ff7214ea471af9a05a588a,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.54
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55a2cc42f8ff7214ea471af9a05a588a, type: 3}
