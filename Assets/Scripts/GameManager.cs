@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     public int row = 1, charCountonRow = 1;
     float endZ;
     float towerLastY;
+    float lockTowerOffs = 0;
 
 
     #endregion
@@ -345,10 +346,12 @@ public class GameManager : MonoBehaviour
             charCountonRow++;
             if (Chars.transform.childCount < charCountonRow * 2)
             {
-                while (Chars.transform.childCount != 0)
+                for(int f=Chars.transform.childCount-1; f>=0; f--)
                 {
-                    Destroy(Chars.transform.GetChild(0).gameObject);
+                    Destroy(Chars.transform.GetChild(f).gameObject);
                 }
+                //lockTowerOffs = towerVerticalDistance * 2;
+                break;
             }
         }
         /*while (Chars.transform.childCount > 0)
@@ -369,7 +372,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < setCharPosDur; i++)
         {
-            curChar.transform.localPosition = Vector3.MoveTowards(curChar.transform.localPosition, targetLocPos, targetLocPosSense * Time.deltaTime);
+            curChar.transform.localPosition = Vector3.MoveTowards(curChar.transform.localPosition, targetLocPos, targetLocPosSense  * Time.deltaTime /3);
             //SetTheTowerPos();
             yield return new WaitForSeconds(0.01f);
         }        
@@ -377,7 +380,7 @@ public class GameManager : MonoBehaviour
 
     void SetTheTowerPos()
     {
-        towerLastY = !lockTowerY ? Tower.transform.position.y + towerIncreseSens * Time.deltaTime : row* towerVerticalDistance - 1.7f;
+        towerLastY = !lockTowerY ? Tower.transform.position.y + towerIncreseSens * Time.deltaTime : row* towerVerticalDistance - 1.7f - lockTowerOffs;
         towerTargerPos = new Vector3(Chars.transform.position.x, towerLastY, Chars.transform.position.z);
         
         Tower.transform.position = Vector3.MoveTowards(Tower.transform.position, towerTargerPos, targetLocPosSense * Time.deltaTime);
