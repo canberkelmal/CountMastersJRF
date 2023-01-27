@@ -14,8 +14,7 @@ public class GameManager : MonoBehaviour
     #region variables
     GameObject Chars, Tower, FinishLine;
     public Joystick joystick;
-    Rigidbody rb;
-    public float towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
+    public float enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
     
     public List<float> distortions = new List<float>();
 
@@ -25,6 +24,7 @@ public class GameManager : MonoBehaviour
     public Vector3 camOffs;
     float x, z, camX, camZ;
     Vector3 towerTargerPos, TargetPos, CamTargetPos;
+    Quaternion CamTargetRot;
     NavMeshAgent PlayerNavMesh;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
@@ -51,8 +51,7 @@ public class GameManager : MonoBehaviour
         Chars = GameObject.Find("Chars");
         cam = GameObject.Find("Main Camera");
         Tower = GameObject.Find("Tower");
-        //tgRb = tg.GetComponent<Rigidbody>();
-        rb = Chars.GetComponent<Rigidbody>();
+        CamTargetRot = GameObject.Find("CameraRotation").transform.rotation;
         //rads = new float[] {UnityEngine.Random.Range(0, 1)};
         distortions.Add(UnityEngine.Random.Range(-distortionRate, distortionRate));
         mainPlayerAgentSpeed = Chars.transform.GetChild(0).GetComponent<NavMeshAgent>().speed;
@@ -91,7 +90,7 @@ public class GameManager : MonoBehaviour
                                                                            groupWalkSens * Time.deltaTime);*/
 
                 Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().destination = runToEnemy ? targetEnemy.transform.position : Chars.transform.position;
-                Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().speed = runToEnemy ? 1 : mainPlayerAgentSpeed;
+                Chars.transform.GetChild(i).GetComponent<NavMeshAgent>().speed = runToEnemy ? enemyFightSpeed : mainPlayerAgentSpeed;
 
                 /*x = DistanceFactor * Mathf.Sqrt(i) * Mathf.Cos(i * Radius) + distortions[i];
                 z = DistanceFactor * Mathf.Sqrt(i) * Mathf.Sin(i * Radius) + distortions[i];
@@ -209,12 +208,13 @@ public class GameManager : MonoBehaviour
         }
 
         CamTargetPos = !towering ? new Vector3(camX/Chars.transform.childCount, 0, camZ / Chars.transform.childCount) + camOffs
-                                 : Tower.transform.position + camOffs - (Tower.transform.position.y * Vector3.up/2);
+                                 : Tower.transform.position + camOffs - (Tower.transform.position.y * Vector3.up/2) + new Vector3(15.17f, 0, 2.7f);
         PlayerCountCv.transform.position = CamTargetPos - camOffs + (Vector3.up * 1.52f);
 
         camX = 0;
         camZ = 0;
 
+        cam.transform.rotation = towering ? Quaternion.Lerp(cam.transform.rotation, CamTargetRot, CamSens * Time.deltaTime) : cam.transform.rotation;
         cam.transform.position = Vector3.Lerp(cam.transform.position, CamTargetPos, CamSens * Time.deltaTime);
     }
 
@@ -329,13 +329,17 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.01f * (setCharPosDur));//wait for the tower position set
             row++;
-            if (charCountonRow > Chars.transform.childCount)
+
+
+            /*if (charCountonRow > Chars.transform.childCount)
             {
                 while (Chars.transform.childCount > 0)
                 {
                     Destroy(Chars.transform.GetChild(0).gameObject);
                 }
-            }
+            }*/
+
+
             //StartCoroutine(SetTheTowerPos());
             charCountonRow++;
         }

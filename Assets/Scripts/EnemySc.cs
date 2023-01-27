@@ -8,6 +8,7 @@ public class EnemySc : MonoBehaviour
     GameManager gm;
     EnemyGroupSc parentSc;
     public float enemySplachYOffset;
+    bool triggered = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,9 +19,9 @@ public class EnemySc : MonoBehaviour
     void OnCollisionEnter(Collision other)
     {
         print("Enemy Collision!" + other.gameObject.tag);
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && !triggered)
         {
-            this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+            triggered = true;
             other.gameObject.GetComponent<CapsuleCollider>().enabled = false;
             Instantiate(playerDeathSplashEffect, other.transform.position, Quaternion.identity);
             Instantiate(enemyDeathSplashEffect, this.transform.position + Vector3.up*enemySplachYOffset, Quaternion.identity);

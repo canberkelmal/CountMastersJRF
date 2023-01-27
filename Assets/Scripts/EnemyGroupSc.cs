@@ -11,7 +11,7 @@ public class EnemyGroupSc : MonoBehaviour
     public Text EnemyCountTx;
     public GameObject refEnemy, chars;
     GameManager gm;
-    float tempJsSensivity;
+    float tempJsSensivity, tempAgentSpeed;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
 
