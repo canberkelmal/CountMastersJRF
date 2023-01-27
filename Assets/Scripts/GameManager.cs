@@ -391,6 +391,7 @@ public class GameManager : MonoBehaviour
         if (Tower.transform.childCount<1)
         {
             Time.timeScale = 0;
+            EndOfGame();
         }
     }
 
@@ -422,5 +423,6 @@ public class GameManager : MonoBehaviour
     void EndOfGame()
     {
         startMultiplier = 1 + (row - 2) * 0.2f;
+
     }
 }
