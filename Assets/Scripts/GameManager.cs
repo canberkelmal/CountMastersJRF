@@ -14,14 +14,15 @@ public class GameManager : MonoBehaviour
     #region variables
     GameObject Chars, Tower, FinishLine;
     public Joystick joystick;
-    public float enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, spawnSense, distortionRate, distortion,  groupWalkSens, stopDist;
+    public float enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, distortionRate, distortion,  groupWalkSens, stopDist;
     
     public List<float> distortions = new List<float>();
 
     public int playerCount = 1;
-    public int setGroupDuration = 25;
-    GameObject cam;
     public Vector3 camOffs;
+    public int setGroupDuration = 25;
+    public float spawnSense;
+    GameObject cam;
     float x, z, camX, camZ;
     Vector3 towerTargerPos, TargetPos, CamTargetPos;
     Quaternion CamTargetRot;
@@ -342,6 +343,13 @@ public class GameManager : MonoBehaviour
 
             //StartCoroutine(SetTheTowerPos());
             charCountonRow++;
+            if (Chars.transform.childCount < charCountonRow * 2)
+            {
+                while (Chars.transform.childCount != 0)
+                {
+                    Destroy(Chars.transform.GetChild(0).gameObject);
+                }
+            }
         }
         /*while (Chars.transform.childCount > 0)
         {
