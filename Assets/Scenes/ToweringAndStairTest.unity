@@ -3283,6 +3283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystick: {fileID: 1286561549}
+  startMultiplier: 1
   enemyFightSpeed: 2
   towerIncreseSens: 3.75
   setCharPosDur: 20
@@ -3311,6 +3312,7 @@ MonoBehaviour:
   targetEnemy: {fileID: 0}
   row: 1
   charCountonRow: 1
+  lockTowerOffs: -0.88
 --- !u!4 &958941396
 Transform:
   m_ObjectHideFlags: 0

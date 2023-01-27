@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     #region variables
     GameObject Chars, Tower, FinishLine;
     public Joystick joystick;
-    public float enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, distortionRate, distortion,  groupWalkSens, stopDist;
+    public float startMultiplier = 1, enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, distortionRate, distortion,  groupWalkSens, stopDist;
     
     public List<float> distortions = new List<float>();
 
@@ -41,7 +41,8 @@ public class GameManager : MonoBehaviour
     public int row = 1, charCountonRow = 1;
     float endZ;
     float towerLastY;
-    float lockTowerOffs = 0;
+    public float lockTowerOffs = 0;
+
 
 
     #endregion
@@ -330,7 +331,6 @@ public class GameManager : MonoBehaviour
             //Chars.transform.position += Vector3.up * towerVerticalDistance;
 
             yield return new WaitForSeconds(0.01f * (setCharPosDur));//wait for the tower position set
-            row++;
 
 
             /*if (charCountonRow > Chars.transform.childCount)
@@ -352,6 +352,10 @@ public class GameManager : MonoBehaviour
                 }
                 //lockTowerOffs = towerVerticalDistance * 2;
                 break;
+            }
+            else
+            {
+                row++;
             }
         }
         /*while (Chars.transform.childCount > 0)
@@ -380,10 +384,14 @@ public class GameManager : MonoBehaviour
 
     void SetTheTowerPos()
     {
-        towerLastY = !lockTowerY ? Tower.transform.position.y + towerIncreseSens * Time.deltaTime : row* towerVerticalDistance - 1.7f - lockTowerOffs;
+        towerLastY = !lockTowerY ? Tower.transform.position.y + towerIncreseSens * Time.deltaTime : row * towerVerticalDistance + lockTowerOffs;
         towerTargerPos = new Vector3(Chars.transform.position.x, towerLastY, Chars.transform.position.z);
         
         Tower.transform.position = Vector3.MoveTowards(Tower.transform.position, towerTargerPos, targetLocPosSense * Time.deltaTime);
+        if (Tower.transform.childCount<1)
+        {
+            Time.timeScale = 0;
+        }
     }
 
     IEnumerator SetGroupPos(GameObject Runner, int ind)
@@ -409,5 +417,10 @@ public class GameManager : MonoBehaviour
         }*/
         if(ind == Chars.transform.childCount-1)
             groupTrig = true;
+    }
+
+    void EndOfGame()
+    {
+        startMultiplier = 1 + (row - 2) * 0.2f;
     }
 }
