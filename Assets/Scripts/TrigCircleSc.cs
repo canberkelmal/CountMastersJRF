@@ -8,8 +8,7 @@ public class TrigCircleSc : MonoBehaviour
     GameObject enemies;
     void Start()
     {
-        enemies = GameObject.Find("Enemies");
-        enSc = enemies.GetComponent<EnemyGroupSc>();
+        enSc = transform.parent.GetComponent<EnemyGroupSc>();
     }
 
     private void OnTriggerEnter(Collider other)

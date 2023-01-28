@@ -13,7 +13,7 @@ public class EnemySc : MonoBehaviour
     void Start()
     {
         gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        parentSc = transform.parent.GetComponent<EnemyGroupSc>();
+        parentSc = this.transform.parent.GetComponent<EnemyGroupSc>();
     }
 
     void OnCollisionEnter(Collision other)

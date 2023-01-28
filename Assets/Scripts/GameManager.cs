@@ -12,9 +12,9 @@ using static UnityEngine.InputManagerEntry;
 public class GameManager : MonoBehaviour
 {
     #region variables
-    GameObject Chars, Tower, FinishLine, FinishPanel;
+    GameObject Chars, Tower, FinishLine, FinishPanel, Stairs;
     public Joystick joystick;
-    public float  enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, distortionRate, distortion,  groupWalkSens, stopDist;
+    public float  FinishForwardSens, enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, distortionRate, distortion,  groupWalkSens, stopDist;
     public int startMultiplier = 1;
     public List<float> distortions = new List<float>();
 
@@ -46,6 +46,17 @@ public class GameManager : MonoBehaviour
 
 
 
+    public float frc;
+    public static float forwardV;
+    Vector3 startPos = Vector2.zero;
+    Vector3 startPos2 = Vector2.zero;
+    public static float smoothSpeed = 0.1f;
+    public float sens;
+    Vector3 smoothedPosition;
+    Vector3 mousePos;
+    public float force = -10f;
+    public float swing = 0.02f;
+
     #endregion
 
     // Start is called before the first frame update
@@ -55,12 +66,18 @@ public class GameManager : MonoBehaviour
         Chars = GameObject.Find("Chars");
         cam = GameObject.Find("Main Camera");
         Tower = GameObject.Find("Tower");
+        Stairs = GameObject.Find("Stairs");
         FinishPanel = joystick.transform.parent.GetChild(2).gameObject;
         CamTargetRot = GameObject.Find("CameraRotation").transform.rotation;
         //rads = new float[] {UnityEngine.Random.Range(0, 1)};
         distortions.Add(UnityEngine.Random.Range(-distortionRate, distortionRate));
         mainPlayerAgentSpeed = Chars.transform.GetChild(0).GetComponent<NavMeshAgent>().speed;
         endZ = FinishLine.transform.position.z;
+
+
+        frc = PlayerPrefs.GetFloat("horizontalForce", 7f);
+        forwardV = PlayerPrefs.GetFloat("forwardForce", 9f);
+        smoothSpeed = PlayerPrefs.GetFloat("smoothSpeed", 0.25f);
     }
 
     // Update is called once per frame
@@ -69,24 +86,34 @@ public class GameManager : MonoBehaviour
         //Reloads the current scene
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            Time.timeScale = 1;
+            Restart();
         }
 
     }
 
     void FixedUpdate()
     {
-        InputsController();
         CameraController();
         if(Chars.transform.position.z > endZ && !towering)
         {
+            Chars.transform.position = Vector3.MoveTowards(Chars.transform.position,
+                                                    new Vector3(0, 0, Stairs.transform.GetChild(Stairs.transform.childCount - 1).position.z),
+                                                    FinishForwardSens * Time.deltaTime);
             finishCharCount = Chars.transform.childCount;
             ReachtoFinish();
         }
-
-        if (towering)
+        else if (towering)
+        {
+            Chars.transform.position = Vector3.MoveTowards(Chars.transform.position,
+                                                    new Vector3(0, 0, Stairs.transform.GetChild(Stairs.transform.childCount - 1).position.z),
+                                                    FinishForwardSens * Time.deltaTime);
             SetTheTowerPos();
+        }
+        else
+        {
+            //InputsController();
+            DragController();
+        }
 
         if (groupTrig)
         {
@@ -115,7 +142,36 @@ public class GameManager : MonoBehaviour
     void InputsController()
     {
         //Controls char's x position
-        Chars.transform.position += new Vector3(joystick.Horizontal * jsSensivity * Time.deltaTime, 0, forwardSpeed * jsSensivity * Time.deltaTime);
+        //Chars.transform.position += new Vector3(joystick.Horizontal * jsSensivity * Time.deltaTime, 0, forwardSpeed * jsSensivity * Time.deltaTime);
+        Chars.transform.position += new Vector3(0, 0, forwardSpeed * jsSensivity * Time.deltaTime);
+
+    }
+
+    void DragController()
+    {
+        Chars.transform.position += new Vector3(0, 0, forwardSpeed * jsSensivity * Time.deltaTime);
+        mousePos = new Vector3( Remap(Input.mousePosition.x, -sens + 10, Screen.width + sens - 10, -2.8f, 2.8f), 0, 0 );
+        if (Input.GetMouseButtonDown(0))
+        {
+            startPos = mousePos;
+            startPos2 = Chars.transform.position;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 push = mousePos - startPos;
+
+            if (mousePos.x < startPos.x && Chars.transform.position.x > -2.8f)
+            {
+                smoothedPosition = Vector3.Lerp(Chars.transform.position, startPos2 + push, smoothSpeed);
+                Chars.transform.position = new Vector3(smoothedPosition.x, Chars.transform.position.y, Chars.transform.position.z);
+            }
+            else if (mousePos.x > startPos.x && Chars.transform.position.x < 2.8f)
+            {
+                smoothedPosition = Vector3.Lerp(Chars.transform.position, startPos2 + push, smoothSpeed);
+                Chars.transform.position = new Vector3(smoothedPosition.x, Chars.transform.position.y, Chars.transform.position.z);
+            }
+        }
     }
 
     //If op is true, adds opNumber times player. Else, removes opNumber times player.
@@ -432,5 +488,26 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("coin", PlayerPrefs.GetInt("coin", 0) + finishCharCount * startMultiplier);
         FinishPanel.transform.GetChild(5).GetComponent<Text>().text = PlayerPrefs.GetInt("coin").ToString();
         FinishPanel.transform.GetChild(2).GetComponent<Text>().text = "+" + finishCharCount * startMultiplier;
+    }
+    public static float Remap(float value, float from1, float to1, float from2, float to2)
+    {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+    }
+
+    public void ResetCoinCaunt()
+    {
+        PlayerPrefs.SetInt("coin", 0);
+        FinishPanel.transform.GetChild(5).GetComponent<Text>().text = PlayerPrefs.GetInt("coin").ToString();
+    }
+
+    public void NextLevel()
+    {
+
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1;
     }
 }
