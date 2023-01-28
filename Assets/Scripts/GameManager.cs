@@ -12,10 +12,10 @@ using static UnityEngine.InputManagerEntry;
 public class GameManager : MonoBehaviour
 {
     #region variables
-    GameObject Chars, Tower, FinishLine;
+    GameObject Chars, Tower, FinishLine, FinishPanel;
     public Joystick joystick;
-    public float startMultiplier = 1, enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, distortionRate, distortion,  groupWalkSens, stopDist;
-    
+    public float  enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, distortionRate, distortion,  groupWalkSens, stopDist;
+    public int startMultiplier = 1;
     public List<float> distortions = new List<float>();
 
     public int playerCount = 1;
@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     float endZ;
     float towerLastY;
     public float lockTowerOffs = 0;
+    int finishCharCount = 0;
 
 
 
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
         Chars = GameObject.Find("Chars");
         cam = GameObject.Find("Main Camera");
         Tower = GameObject.Find("Tower");
+        FinishPanel = joystick.transform.parent.GetChild(2).gameObject;
         CamTargetRot = GameObject.Find("CameraRotation").transform.rotation;
         //rads = new float[] {UnityEngine.Random.Range(0, 1)};
         distortions.Add(UnityEngine.Random.Range(-distortionRate, distortionRate));
@@ -68,6 +70,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            Time.timeScale = 1;
         }
 
     }
@@ -77,7 +80,10 @@ public class GameManager : MonoBehaviour
         InputsController();
         CameraController();
         if(Chars.transform.position.z > endZ && !towering)
+        {
+            finishCharCount = Chars.transform.childCount;
             ReachtoFinish();
+        }
 
         if (towering)
             SetTheTowerPos();
@@ -134,7 +140,6 @@ public class GameManager : MonoBehaviour
         //Removes players
         else
         {
-            int t = Chars.transform.childCount - 1;
             for (int i = 0; i < opNumber; i++)
             {
                 //Destroy(Chars.transform.GetChild(t - i).gameObject);
@@ -390,7 +395,6 @@ public class GameManager : MonoBehaviour
         Tower.transform.position = Vector3.MoveTowards(Tower.transform.position, towerTargerPos, targetLocPosSense * Time.deltaTime);
         if (Tower.transform.childCount<1)
         {
-            Time.timeScale = 0;
             EndOfGame();
         }
     }
@@ -422,7 +426,11 @@ public class GameManager : MonoBehaviour
 
     void EndOfGame()
     {
-        startMultiplier = 1 + (row - 2) * 0.2f;
-
+        Time.timeScale = 0;
+        FinishPanel.SetActive(true);
+        startMultiplier = (int)(1 + (row - 2) * 0.2f);
+        PlayerPrefs.SetInt("coin", PlayerPrefs.GetInt("coin", 0) + finishCharCount * startMultiplier);
+        FinishPanel.transform.GetChild(5).GetComponent<Text>().text = PlayerPrefs.GetInt("coin").ToString();
+        FinishPanel.transform.GetChild(2).GetComponent<Text>().text = "+" + finishCharCount * startMultiplier;
     }
 }
