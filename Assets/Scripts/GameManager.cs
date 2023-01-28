@@ -13,19 +13,22 @@ public class GameManager : MonoBehaviour
 {
     #region variables
     GameObject Chars, Tower, FinishLine, FinishPanel, Stairs;
+
     public Joystick joystick;
-    public float  FinishForwardSens, enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, distortionRate, distortion,  groupWalkSens, stopDist;
+    public float  FinishForwardSens, enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, toweringCamSens, distortionRate, distortion,  groupWalkSens, stopDist;
     public int startMultiplier = 1;
+    public bool bossLv = false;
     public List<float> distortions = new List<float>();
 
     public int playerCount = 1;
     public Vector3 camOffs;
     public int setGroupDuration = 25;
     public float spawnSense;
-    GameObject cam;
+    GameObject cam, camFallower;
     float x, z, camX, camZ;
     Vector3 towerTargerPos, TargetPos, CamTargetPos;
     Quaternion CamTargetRot;
+
     NavMeshAgent PlayerNavMesh;
 
     [Range(0f, 1f)][SerializeField] private float DistanceFactor, Radius;
@@ -44,18 +47,14 @@ public class GameManager : MonoBehaviour
     public float lockTowerOffs = 0;
     int finishCharCount = 0;
 
+    public float camTimeLeft = 4.0f;
 
-
-    public float frc;
-    public static float forwardV;
     Vector3 startPos = Vector2.zero;
     Vector3 startPos2 = Vector2.zero;
-    public static float smoothSpeed = 0.1f;
+    public float smoothSpeed = 0.25f;
     public float sens;
     Vector3 smoothedPosition;
     Vector3 mousePos;
-    public float force = -10f;
-    public float swing = 0.02f;
 
     #endregion
 
@@ -68,16 +67,12 @@ public class GameManager : MonoBehaviour
         Tower = GameObject.Find("Tower");
         Stairs = GameObject.Find("Stairs");
         FinishPanel = joystick.transform.parent.GetChild(2).gameObject;
+        camFallower = GameObject.Find("CameraFallower");
         CamTargetRot = GameObject.Find("CameraRotation").transform.rotation;
         //rads = new float[] {UnityEngine.Random.Range(0, 1)};
         distortions.Add(UnityEngine.Random.Range(-distortionRate, distortionRate));
         mainPlayerAgentSpeed = Chars.transform.GetChild(0).GetComponent<NavMeshAgent>().speed;
         endZ = FinishLine.transform.position.z;
-
-
-        frc = PlayerPrefs.GetFloat("horizontalForce", 7f);
-        forwardV = PlayerPrefs.GetFloat("forwardForce", 9f);
-        smoothSpeed = PlayerPrefs.GetFloat("smoothSpeed", 0.25f);
     }
 
     // Update is called once per frame
@@ -109,7 +104,7 @@ public class GameManager : MonoBehaviour
                                                     FinishForwardSens * Time.deltaTime);
             SetTheTowerPos();
         }
-        else
+        else if(!runToEnemy)
         {
             //InputsController();
             DragController();
@@ -277,9 +272,26 @@ public class GameManager : MonoBehaviour
 
         camX = 0;
         camZ = 0;
+        cam.transform.position = !towering ? Vector3.Lerp(cam.transform.position, CamTargetPos, CamSens * Time.deltaTime) : Vector3.Lerp(cam.transform.position, CamTargetPos, toweringCamSens * Time.deltaTime);
 
-        cam.transform.rotation = towering ? Quaternion.Lerp(cam.transform.rotation, CamTargetRot, CamSens * Time.deltaTime) : cam.transform.rotation;
-        cam.transform.position = Vector3.Lerp(cam.transform.position, CamTargetPos, CamSens * Time.deltaTime);
+        if (towering)
+        {
+            camTimeLeft -= Time.deltaTime;
+            if(camTimeLeft <= 4f &&  camTimeLeft > 2f)
+            {
+                //cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, CamTargetRot, CamSens * Time.deltaTime);
+                camFallower.transform.position = cam.transform.position;
+                camFallower.transform.LookAt(Tower.transform.GetChild(22));
+                cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, camFallower.transform.rotation, toweringCamSens * Time.deltaTime);
+            }
+            else if (camTimeLeft <= 2f)
+            {
+                //cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, CamTargetRot, CamSens * Time.deltaTime);
+                camFallower.transform.position = cam.transform.position;
+                camFallower.transform.LookAt(Tower.transform.GetChild(22));
+                cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, camFallower.transform.rotation, toweringCamSens * Time.deltaTime);
+            }
+        }
     }
 
     public void ReachtoFinish()
@@ -437,7 +449,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < setCharPosDur; i++)
         {
-            curChar.transform.localPosition = Vector3.MoveTowards(curChar.transform.localPosition, targetLocPos, targetLocPosSense  * Time.deltaTime /3);
+            curChar.transform.localPosition = Vector3.MoveTowards(curChar.transform.localPosition, targetLocPos, targetLocPosSense  * Time.deltaTime /2.5f);
             //SetTheTowerPos();
             yield return new WaitForSeconds(0.01f);
         }        
@@ -446,7 +458,7 @@ public class GameManager : MonoBehaviour
     void SetTheTowerPos()
     {
         towerLastY = !lockTowerY ? Tower.transform.position.y + towerIncreseSens * Time.deltaTime : row * towerVerticalDistance + lockTowerOffs;
-        towerTargerPos = new Vector3(Chars.transform.position.x, towerLastY, Chars.transform.position.z);
+        towerTargerPos = new Vector3(0, towerLastY, Chars.transform.position.z);
         
         Tower.transform.position = Vector3.MoveTowards(Tower.transform.position, towerTargerPos, targetLocPosSense * Time.deltaTime);
         if (Tower.transform.childCount<1)
