@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     public float lockTowerOffs = 0;
     int finishCharCount = 0;
 
-    public float camTimeLeft = 4.0f;
+    public float camTimeLeft = 5.0f;
 
     Vector3 startPos = Vector2.zero;
     Vector3 startPos2 = Vector2.zero;
@@ -272,24 +272,32 @@ public class GameManager : MonoBehaviour
 
         camX = 0;
         camZ = 0;
-        cam.transform.position = !towering ? Vector3.Lerp(cam.transform.position, CamTargetPos, CamSens * Time.deltaTime) : Vector3.Lerp(cam.transform.position, CamTargetPos, toweringCamSens * Time.deltaTime);
+        cam.transform.position = !towering ? Vector3.Lerp(cam.transform.position, CamTargetPos, CamSens * Time.deltaTime) : Vector3.Lerp(cam.transform.position, CamTargetPos, toweringCamSens/2.5f * Time.deltaTime);
 
         if (towering)
         {
-            camTimeLeft -= Time.deltaTime;
-            if(camTimeLeft <= 4f &&  camTimeLeft > 2f)
+            cam.GetComponent<Camera>().fieldOfView = Mathf.MoveTowards(cam.GetComponent<Camera>().fieldOfView, 15, toweringCamSens/2 * Time.deltaTime);
+            if (Tower.transform.childCount<20)
             {
                 //cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, CamTargetRot, CamSens * Time.deltaTime);
                 camFallower.transform.position = cam.transform.position;
-                camFallower.transform.LookAt(Tower.transform.GetChild(22));
+                camFallower.transform.LookAt(Tower.transform);
                 cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, camFallower.transform.rotation, toweringCamSens * Time.deltaTime);
             }
-            else if (camTimeLeft <= 2f)
+            else
             {
                 //cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, CamTargetRot, CamSens * Time.deltaTime);
                 camFallower.transform.position = cam.transform.position;
-                camFallower.transform.LookAt(Tower.transform.GetChild(22));
-                cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, camFallower.transform.rotation, toweringCamSens * Time.deltaTime);
+                int coun = Tower.transform.childCount;
+                if(coun > 0)
+                {
+                    camFallower.transform.LookAt(Tower.transform.GetChild(coun - 1).transform);
+                }
+                else
+                {
+                    camFallower.transform.LookAt(Tower.transform);
+                }
+                cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, camFallower.transform.rotation, toweringCamSens*2 * Time.deltaTime);
             }
         }
     }

@@ -49,7 +49,7 @@ public class EnemyGroupSc : MonoBehaviour
     {
         numberOfEnemies = transform.childCount - 3;
         EnemyCountTx.text = numberOfEnemies.ToString();
-        if(numberOfEnemies<=0)
+        if(numberOfEnemies<=1)
         {
             gm.jsSensivity = tempJsSensivity;
             gm.runToEnemy = false;
