@@ -12,10 +12,12 @@ using static UnityEngine.InputManagerEntry;
 public class GameManager : MonoBehaviour
 {
     #region variables
-    GameObject Chars, Tower, FinishLine, FinishPanel, Stairs;
+    GameObject Chars, Tower, FinishLine, Stairs;
+    public float targetBarScale, barScale, charStartZ;
+    public GameObject hand, startPanel, bar, FinishPanel;
 
     public Joystick joystick;
-    public float  FinishForwardSens, enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, toweringCamSens, distortionRate, distortion,  groupWalkSens, stopDist;
+    public float handSens, FinishForwardSens, enemyFightSpeed, towerIncreseSens, setCharPosDur, targetLocPosSense, towerAnimDur, towerSense, towerHorizontalDistance, towerVerticalDistance, jsSensivity, forwardSpeed, CamSens, toweringCamSens, distortionRate, distortion,  groupWalkSens, stopDist;
     public int startMultiplier = 1;
     public bool bossLv = false;
     public List<float> distortions = new List<float>();
@@ -55,6 +57,8 @@ public class GameManager : MonoBehaviour
     public float sens;
     Vector3 smoothedPosition;
     Vector3 mousePos;
+    float handStartPosX;
+    bool stared = false;
 
     #endregion
 
@@ -66,18 +70,24 @@ public class GameManager : MonoBehaviour
         cam = GameObject.Find("Main Camera");
         Tower = GameObject.Find("Tower");
         Stairs = GameObject.Find("Stairs");
-        FinishPanel = joystick.transform.parent.GetChild(2).gameObject;
         camFallower = GameObject.Find("CameraFallower");
         CamTargetRot = GameObject.Find("CameraRotation").transform.rotation;
         //rads = new float[] {UnityEngine.Random.Range(0, 1)};
         distortions.Add(UnityEngine.Random.Range(-distortionRate, distortionRate));
         mainPlayerAgentSpeed = Chars.transform.GetChild(0).GetComponent<NavMeshAgent>().speed;
         endZ = FinishLine.transform.position.z;
+        charStartZ= Chars.transform.position.z;
+        StartScreen();
+        handStartPosX = hand.transform.localPosition.x;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetMouseButtonDown(0) & !stared)
+        {
+            go();
+        }
         //Reloads the current scene
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -89,7 +99,8 @@ public class GameManager : MonoBehaviour
     void FixedUpdate()
     {
         CameraController();
-        if(Chars.transform.position.z > endZ && !towering)
+        LevelBar();
+        if (Chars.transform.position.z > endZ && !towering)
         {
             Chars.transform.position = Vector3.MoveTowards(Chars.transform.position,
                                                     new Vector3(0, 0, Stairs.transform.GetChild(Stairs.transform.childCount - 1).position.z),
@@ -104,11 +115,17 @@ public class GameManager : MonoBehaviour
                                                     FinishForwardSens * Time.deltaTime);
             SetTheTowerPos();
         }
-        else if(!runToEnemy)
+        else if(!runToEnemy && stared)
         {
             //InputsController();
             DragController();
         }
+        if (!stared)
+        {
+            hand.transform.localPosition = Vector3.Lerp(hand.transform.localPosition, new Vector3(-handStartPosX, hand.transform.localPosition.y, hand.transform.localPosition.z), handSens * Time.deltaTime);
+        }
+
+
 
         if (groupTrig)
         {
@@ -267,7 +284,7 @@ public class GameManager : MonoBehaviour
         }
 
         CamTargetPos = !towering ? new Vector3(camX/Chars.transform.childCount, 0, camZ / Chars.transform.childCount) + camOffs
-                                 : Tower.transform.position + camOffs - (Tower.transform.position.y * Vector3.up/2) + new Vector3(15.17f, 0, 2.7f);
+                                 : Tower.transform.position + camOffs - (Tower.transform.position.y * Vector3.up/2) + new Vector3(10.17f, 0, 2.7f);
         PlayerCountCv.transform.position = CamTargetPos - camOffs + (Vector3.up * 1.52f);
 
         camX = 0;
@@ -291,7 +308,8 @@ public class GameManager : MonoBehaviour
                 int coun = Tower.transform.childCount;
                 if(coun > 0)
                 {
-                    camFallower.transform.LookAt(Tower.transform.GetChild(coun - 1).transform);
+                    //camFallower.transform.LookAt(Tower.transform.GetChild(20).transform);
+                    camFallower.transform.LookAt(Tower.transform);
                 }
                 else
                 {
@@ -482,7 +500,6 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < setGroupDuration; i++)
         {
-            //Must be modified as written ourself
             x = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Cos(ind * Radius) + distortions[ind];
             z = DistanceFactor * Mathf.Sqrt(ind) * Mathf.Sin(ind * Radius) + distortions[ind];
             TargetPos = new Vector3(x, 0, z);
@@ -509,6 +526,12 @@ public class GameManager : MonoBehaviour
         FinishPanel.transform.GetChild(5).GetComponent<Text>().text = PlayerPrefs.GetInt("coin").ToString();
         FinishPanel.transform.GetChild(2).GetComponent<Text>().text = "+" + finishCharCount * startMultiplier;
     }
+
+    void StartScreen()
+    {
+        startPanel.SetActive(true);
+
+    }
     public static float Remap(float value, float from1, float to1, float from2, float to2)
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
@@ -529,5 +552,17 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1;
+    }
+
+    public void go()
+    {
+        stared = true;
+        startPanel.SetActive(false);
+    }
+
+    public void LevelBar()
+    {
+        barScale = Remap(Chars.transform.position.z, charStartZ, endZ, 0, targetBarScale);
+        bar.transform.localScale = new Vector3(barScale, bar.transform.localScale.y, bar.transform.localScale.z);
     }
 }

@@ -36,7 +36,6 @@ public class EnemyGroupSc : MonoBehaviour
         for (int i = 2; i < numberOfEnemies; i++)
         {
             GameObject currentEnemy = transform.GetChild(i).gameObject;
-            //Must be modified as written ourself
             var x = DistanceFactor * Mathf.Sqrt(i) * Mathf.Cos(i * Radius);
             var z = DistanceFactor * Mathf.Sqrt(i) * Mathf.Sin(i * Radius);
             var TargetPos = new Vector3(x, currentEnemy.transform.localPosition.y, z);
